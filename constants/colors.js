@@ -1,0 +1,1 @@
+export const TRANSPARENT = 'rgba(221, 221, 221, 0.32)'
