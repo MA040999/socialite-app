@@ -1,34 +1,35 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import Navbar from './components/Navbar';
-import CreatePost from './components/CreatePost';
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import Navbar from "./components/Navbar";
+import CreatePost from "./components/CreatePost";
+import Posts from "./components/Posts";
 
 export default function App() {
   return (
-      <LinearGradient
-        colors={['#211663', '#0cae88']}
-        style={styles.container}
-      >
-          <Navbar/>
-        <View style={{...styles.container}}>
-          <CreatePost/>
-          <Text>asdasda</Text>
+    <LinearGradient colors={["#211663", "#0cae88"]} style={styles.container}>
+      <ScrollView style={{ width: "100%" }}>
+        <Navbar />
+        <View style={{ ...styles.container, ...styles.postScreen }}>
+          <CreatePost />
+          <Posts />
         </View>
         {/* <StatusBar  barStyle="light-content" translucent={true} /> */}
-        <StatusBar style='light'/>
-      </LinearGradient>
+      </ScrollView>
+      <StatusBar style="light" backgroundColor="#211663" />
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   postScreen: {
-    flexDirection: 'row',
-  }
+    marginTop: 40,
+    justifyContent: "flex-start",
+  },
 });

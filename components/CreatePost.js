@@ -1,28 +1,45 @@
-import React from 'react'
-import { View, Text, Image, TextInput, StyleSheet } from 'react-native'
-import icon from '../assets/icon.png'
-import { Ionicons } from '@expo/vector-icons';
-import { TRANSPARENT } from '../constants/colors';
+import React from "react";
+import { View, Text, Image, TextInput, StyleSheet } from "react-native";
+import icon from "../assets/user-circle.png";
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { TRANSPARENT } from "../constants/colors";
 
 export default function CreatePost() {
-    return (
-        <View styles={styles.createPostContainer}>
-            <Image source={icon} style={{ width: 30, height: 30 }}/>
-            <TextInput placeholder='Search...' placeholderTextColor='rgba(221, 221, 221, 0.32)' style={{flex: 1, color: 'white', fontSize: 20}}/>
-            <View>
-                <Ionicons name="images" size={24} color="black" />
-
-            </View>
-        </View>
-    )
+  return (
+    <View style={styles.createPostContainer}>
+      <Image source={icon} style={{ width: 50, height: 50 }} />
+      <TextInput
+        placeholder="Search..."
+        placeholderTextColor="rgba(221, 221, 221, 0.32)"
+        style={{ flex: 1, color: "white", fontSize: 17 }}
+      />
+      <View style={styles.iconsContainer}>
+        <Ionicons
+          style={{ paddingHorizontal: 15 }}
+          name="images"
+          size={20}
+          color="white"
+        />
+        <FontAwesome name="send" size={20} color="white" />
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    createPostContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        backgroundColor: "rgb(221, 221, 2)",
-        borderRadius: 15,
-    },
-  });
+  createPostContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    backgroundColor: TRANSPARENT,
+    paddingLeft: 5,
+    paddingVertical: 8,
+    paddingRight: 15,
+    borderRadius: 25,
+    marginHorizontal: 8,
+    marginBottom: 50,
+  },
+  iconsContainer: {
+    flexDirection: "row",
+  },
+});
