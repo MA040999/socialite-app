@@ -9,7 +9,7 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 
-export default function Post() {
+export default function Post({navigation}) {
   return (
     <View style={styles.postContainer}>
       <View style={styles.postHeader}>
@@ -47,6 +47,7 @@ export default function Post() {
           style={{ paddingLeft: 15 }}
           name="comment"
           size={20}
+          onPress={()=>navigation && navigation.navigate('PostDetails')}
           color="white"
         />
         <Text style={{ color: "white", marginLeft: 5 }}>24</Text>

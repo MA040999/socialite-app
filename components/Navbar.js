@@ -7,16 +7,14 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { Entypo } from "@expo/vector-icons";
-import { Foundation } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
+import { Feather, AntDesign, Entypo } from "@expo/vector-icons";
 import logo from "../assets/favicon.png";
 import { TRANSPARENT } from "../constants/colors";
 
-export default function Navbar() {
+export default function Navbar({navigation}) {
   return (
     <View style={styles.container}>
-      <Image source={logo} style={{ width: 50, height: 50 }} />
+      {navigation ?  <AntDesign name="arrowleft" size={24} color="white" onPress={()=>navigation.goBack()} /> : <Image source={logo} style={{ width: 50, height: 50 }} />}
       <View style={{ ...styles.menuContainer, ...styles.searchBar }}>
         <TextInput
           placeholder="Search..."
@@ -46,6 +44,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     width: "100%",
     paddingTop: 45,
+    marginBottom: 25
   },
   menuContainer: {
     backgroundColor: TRANSPARENT,

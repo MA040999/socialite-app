@@ -1,24 +1,41 @@
-import { StatusBar } from "expo-status-bar";
+import 'react-native-gesture-handler';
 import React from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import Navbar from "./components/Navbar";
-import CreatePost from "./components/CreatePost";
-import Posts from "./components/Posts";
+// import Navigator from './routes/drawer'
+import { StyleSheet } from "react-native";
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Home from "./components/Home";
+import Login from "./components/Login";
+import PostDetails from './components/PostDetails';
+
+const HomeStack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator screenOptions={{headerShown: false}}>
+      <HomeStack.Screen
+        name="Home"
+        component={Home}
+      />
+      <HomeStack.Screen
+        name="PostDetails"
+        component={PostDetails}
+
+      />
+    </HomeStack.Navigator>
+  );
+}
 
 export default function App() {
   return (
-    <LinearGradient colors={["#211663", "#0cae88"]} style={styles.container}>
-      <ScrollView style={{ width: "100%" }}>
-        <Navbar />
-        <View style={{ ...styles.container, ...styles.postScreen }}>
-          <CreatePost />
-          <Posts />
-        </View>
-        {/* <StatusBar  barStyle="light-content" translucent={true} /> */}
-      </ScrollView>
-      <StatusBar style="light" backgroundColor="#211663" />
-    </LinearGradient>
+    <NavigationContainer >
+      <Drawer.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
+        <Drawer.Screen  name="HomeStack" component={HomeStackScreen}  />
+        <Drawer.Screen name="LoginStack" component={Login}/>
+      </Drawer.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -27,9 +44,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-  postScreen: {
-    marginTop: 40,
-    justifyContent: "flex-start",
   },
 });
