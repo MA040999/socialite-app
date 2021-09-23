@@ -11,15 +11,24 @@ import { Feather, AntDesign, Entypo } from "@expo/vector-icons";
 import logo from "../assets/favicon.png";
 import { TRANSPARENT } from "../constants/colors";
 
-export default function Navbar({navigation}) {
+export default function Navbar({ navigation }) {
   return (
     <View style={styles.container}>
-      {navigation ?  <AntDesign name="arrowleft" size={24} color="white" onPress={()=>navigation.goBack()} /> : <Image source={logo} style={{ width: 50, height: 50 }} />}
+      {navigation.canGoBack() ? (
+        <AntDesign
+          name="arrowleft"
+          size={24}
+          color="white"
+          onPress={() => navigation.goBack()}
+        />
+      ) : (
+        <Image source={logo} style={{ width: 50, height: 50 }} />
+      )}
       <View style={{ ...styles.menuContainer, ...styles.searchBar }}>
         <TextInput
           placeholder="Search..."
           placeholderTextColor={TRANSPARENT}
-          style={{ flex: 1, color: "white", fontSize: 15 }}
+          style={{ flex: 1, color: "white", fontSize: 13 }}
         />
         <Feather
           style={{ paddingLeft: 5 }}
@@ -29,7 +38,12 @@ export default function Navbar({navigation}) {
         />
       </View>
       <TouchableOpacity style={styles.menuContainer}>
-        <Entypo name="menu" size={35} color="white" />
+        <Entypo
+          name="menu"
+          size={35}
+          color="white"
+          onPress={() => navigation.openDrawer()}
+        />
       </TouchableOpacity>
     </View>
   );
@@ -44,7 +58,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     width: "100%",
     paddingTop: 45,
-    marginBottom: 25
+    marginBottom: 25,
   },
   menuContainer: {
     backgroundColor: TRANSPARENT,

@@ -9,9 +9,9 @@ export default function CreatePost() {
     <View style={styles.createPostContainer}>
       <Image source={icon} style={{ width: 50, height: 50 }} />
       <TextInput
-        placeholder="Search..."
+        placeholder="What's on your mind?"
         placeholderTextColor="rgba(221, 221, 221, 0.32)"
-        style={{ flex: 1, color: "white", fontSize: 17 }}
+        style={{ flex: 1, color: "white", fontSize: 14 }}
       />
       <View style={styles.iconsContainer}>
         <Ionicons
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     marginHorizontal: 8,
     marginBottom: 50,
-    marginTop: -30
+    marginTop: -30,
   },
   iconsContainer: {
     flexDirection: "row",
