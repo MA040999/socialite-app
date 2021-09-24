@@ -9,6 +9,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import PostDetails from "./components/PostDetails";
 import Signup from "./components/Signup";
+import { PRIMARY, SECONDARY } from "./constants/colors";
 
 const HomeStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -29,14 +30,14 @@ export default function App() {
         initialRouteName="Home"
         screenOptions={{
           headerShown: false,
-          drawerActiveBackgroundColor: "#211663",
-          drawerInactiveBackgroundColor: "rgba(0,0,0,0.15)",
-          drawerActiveTintColor: "white",
+          drawerActiveBackgroundColor: SECONDARY,
+          drawerInactiveBackgroundColor: "rgba(255,255,255, 0.1)",
+          drawerActiveTintColor: PRIMARY,
           drawerInactiveTintColor: "white",
           drawerStyle: {
-            marginTop: 25,
+            marginTop: 24,
             paddingTop: 20,
-            backgroundColor: "#0cae88",
+            backgroundColor: PRIMARY,
             borderTopRightRadius: 50,
             borderBottomRightRadius: 50,
             elevation: 10,
@@ -51,7 +52,7 @@ export default function App() {
         <Drawer.Screen name="Login" component={Login} />
         <Drawer.Screen name="Signup" component={Signup} />
       </Drawer.Navigator>
-      <StatusBar style="light" backgroundColor="#211663" />
+      <StatusBar style="light" backgroundColor={PRIMARY} />
     </NavigationContainer>
   );
 }

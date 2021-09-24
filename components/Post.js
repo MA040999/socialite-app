@@ -9,53 +9,70 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import Confirmation from "./Confirmation";
+import EditPost from "./EditPost";
 
-export default function Post({navigation}) {
-  const [isOpen, setIsOpen] = useState(false)
+export default function Post({ navigation, isComment }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   return (
     <View style={styles.postContainer}>
-      <Confirmation isOpen={isOpen} setIsOpen={setIsOpen}/>
+      {!isComment && <Confirmation isOpen={isOpen} setIsOpen={setIsOpen} />}
+      {!isComment && (
+        <EditPost isEditOpen={isEditOpen} setIsEditOpen={setIsEditOpen} />
+      )}
       <View style={styles.postHeader}>
         <Image source={icon} style={{ width: 40, height: 40 }} />
         <View style={styles.postHeaderUserName}>
           <Text style={{ color: "white" }}>Muhammed Ahmed</Text>
           <Text style={{ fontSize: 10, color: "white" }}>3 minutes ago</Text>
         </View>
-        <View style={styles.iconsContainer}>
-          <Feather
-            style={{ paddingHorizontal: 15 }}
-            name="edit"
-            size={20}
-            color="white"
-          />
-          <Ionicons name="ios-trash" size={20} color="white" onPress={()=>setIsOpen(!isOpen)} />
-        </View>
+        {!isComment && (
+          <View style={styles.iconsContainer}>
+            <Feather
+              style={{ paddingHorizontal: 15 }}
+              name="edit"
+              size={20}
+              color="white"
+              onPress={() => setIsEditOpen(!isEditOpen)}
+            />
+            <Ionicons
+              name="ios-trash"
+              size={20}
+              color="white"
+              onPress={() => setIsOpen(!isOpen)}
+            />
+          </View>
+        )}
       </View>
       <View style={styles.postBody}>
         <Text style={{ color: "white" }}>Hellloooo!!!</Text>
       </View>
-      <View style={styles.postImagesContainer}>
-        <Image source={icon} style={{ width: 60, height: 60 }} />
-        <Image source={icon} style={{ width: 60, height: 60 }} />
-        <Image source={icon} style={{ width: 60, height: 60 }} />
-        <Image source={icon} style={{ width: 60, height: 60 }} />
-        <Image source={icon} style={{ width: 60, height: 60 }} />
-      </View>
-      <View
-        style={{ ...styles.iconsContainer, ...styles.likeCommentContainer }}
-      >
-        <AntDesign name="hearto" size={20} color="white" />
-        <Text style={{ color: "white", marginLeft: 5 }}>12</Text>
-        <MaterialIcons
-          style={{ paddingLeft: 15 }}
-          name="comment"
-          size={20}
-          onPress={()=>navigation && navigation.navigate('PostDetails')}
-          color="white"
-        />
-        <Text style={{ color: "white", marginLeft: 5 }}>24</Text>
-      </View>
+      {!isComment && (
+        <View style={styles.postImagesContainer}>
+          <Image source={icon} style={{ width: 60, height: 60 }} />
+          <Image source={icon} style={{ width: 60, height: 60 }} />
+          <Image source={icon} style={{ width: 60, height: 60 }} />
+          <Image source={icon} style={{ width: 60, height: 60 }} />
+          <Image source={icon} style={{ width: 60, height: 60 }} />
+        </View>
+      )}
+      {!isComment && (
+        <View
+          style={{ ...styles.iconsContainer, ...styles.likeCommentContainer }}
+        >
+          <AntDesign name="hearto" size={20} color="white" />
+          <Text style={{ color: "white", marginLeft: 5 }}>12</Text>
+          <MaterialIcons
+            style={{ paddingLeft: 15 }}
+            name="comment"
+            size={20}
+            onPress={() => navigation && navigation.navigate("PostDetails")}
+            color="white"
+          />
+          <Text style={{ color: "white", marginLeft: 5 }}>24</Text>
+        </View>
+      )}
     </View>
   );
 }

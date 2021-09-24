@@ -3,23 +3,17 @@ import React from "react";
 import { View, Text, Modal, StyleSheet } from "react-native";
 import { PRIMARY, SECONDARY, TRANSPARENT } from "../constants/colors";
 import Button from "./Button";
+import CreatePost from "./CreatePost";
 
-export default function Confirmation({ isOpen, setIsOpen }) {
+export default function EditPost({ isEditOpen, setIsEditOpen }) {
   const handleClose = () => {
-    setIsOpen(!isOpen);
+    setIsEditOpen(!isEditOpen);
   };
   return (
-    <Modal animationType="slide" transparent={true} visible={isOpen}>
+    <Modal animationType="slide" transparent={true} visible={isEditOpen}>
       <View style={styles.modalContainer}>
-        <View style={styles.modal}>
-          <Text style={{ color: "white" }}>
-            Are you sure you want to delete?
-          </Text>
-          <View style={styles.buttonContainer}>
-            <Button title={"Yes"} handlePress={handleClose} />
-            <Button title={"No"} handlePress={handleClose} />
-          </View>
-        </View>
+        <CreatePost />
+        <Button title={"Cancel"} handlePress={handleClose} />
       </View>
     </Modal>
   );
@@ -43,7 +37,16 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 20,
     flexDirection: "row",
-    justifyContent: "space-around",
-    width: "70%",
+  },
+  button: {
+    elevation: 5,
+    borderRadius: 10,
+    padding: 10,
+    paddingHorizontal: 40,
+    marginHorizontal: 10,
+  },
+  buttonText: {
+    color: "white",
+    textTransform: "uppercase",
   },
 });

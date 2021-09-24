@@ -4,10 +4,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import Navbar from "../components/Navbar";
 import CreatePost from "../components/CreatePost";
 import Posts from "../components/Posts";
+import { PRIMARY, SECONDARY } from "../constants/colors";
 
 export default function Home({ navigation }) {
   return (
-    <LinearGradient colors={["#211663", "#0cae88"]} style={styles.container}>
+    <LinearGradient colors={[PRIMARY, SECONDARY]} style={styles.container}>
       <ScrollView style={{ width: "100%" }}>
         <Navbar navigation={navigation} />
         <View style={{ ...styles.container, ...styles.postScreen }}>

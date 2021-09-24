@@ -1,82 +1,73 @@
-import React from 'react'
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import React from "react";
+import { StyleSheet, Text, View, TextInput, Pressable } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import Navbar from './Navbar';
-import { TRANSPARENT } from '../constants/colors';
+import Navbar from "./Navbar";
+import {
+  PLACEHOLDER,
+  PRIMARY,
+  SECONDARY,
+  TRANSPARENT,
+} from "../constants/colors";
+import Button from "./Button";
 
-export default function Login({navigation}) {
-    return (
-        <LinearGradient colors={["#211663", "#0cae88"]} style={styles.container}>
-            <Navbar navigation={navigation} />
-            <View style={{ ...styles.postScreen }}>
-                <Text style={styles.heading}>LOGIN</Text>
-                <View style={styles.inputsContainer}>
-                    <TextInput
-                        textContentType='emailAddress'
-                        placeholder="Email Address"
-                        placeholderTextColor="rgba(221, 221, 221, 0.5)"
-                        autoCompleteType={'email'}
-                        keyboardType={'email-address'}
-                        style={{ color: "white", fontSize: 14, ...styles.input }}
-                    />
-                    <TextInput
-                        textContentType='password'
-                        placeholder="Password"
-                        secureTextEntry={true}
-                        autoCompleteType={'password'}
-                        placeholderTextColor="rgba(221, 221, 221, 0.5)"
-                        style={{ color: "white", fontSize: 14, ...styles.input }}
-                    />
-                </View>
-                <LinearGradient colors={["#0cae88", "#211663" ]} style={styles.button}>
-                    <Text style={styles.buttonText}>LOGIN</Text>
-                 </LinearGradient>
-
-            </View>
-         </LinearGradient>
-    )
+export default function Login({ navigation }) {
+  return (
+    <LinearGradient colors={[PRIMARY, SECONDARY]} style={styles.container}>
+      <Navbar navigation={navigation} />
+      <View style={{ ...styles.postScreen }}>
+        <Text style={styles.heading}>Login</Text>
+        <View style={styles.inputsContainer}>
+          <TextInput
+            textContentType="emailAddress"
+            placeholder="Email Address"
+            placeholderTextColor={PLACEHOLDER}
+            autoCompleteType={"email"}
+            keyboardType={"email-address"}
+            style={{ color: "white", fontSize: 14, ...styles.input }}
+          />
+          <TextInput
+            textContentType="password"
+            placeholder="Password"
+            secureTextEntry={true}
+            autoCompleteType={"password"}
+            placeholderTextColor={PLACEHOLDER}
+            style={{ color: "white", fontSize: 14, ...styles.input }}
+          />
+        </View>
+        <Button title={"Login"} />
+      </View>
+    </LinearGradient>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-
-    },
-    postScreen: {
-        backgroundColor: TRANSPARENT,
-        borderRadius: 20,
-        flex: 1,
-        alignSelf: 'center',
-        marginVertical: 30,
-        paddingVertical: 30,
-        width: "85%",
-        alignItems: 'center',
-        justifyContent: 'space-between'
-
-    },
-    heading: {
-        fontSize: 20,
-        color: 'white'
-    },
-    button: {
-        elevation: 5,
-        borderRadius: 10,
-        padding: 10,
-        paddingHorizontal: 40,
-        textTransform: 'uppercase'
-    },
-    buttonText: {
-        color: 'white'
-    },
-    inputsContainer: {
-        justifyContent: 'space-around',
-    },
-    input: {
-        padding: 5,
-        marginVertical: 10,
-        minWidth: '70%',
-        backgroundColor: TRANSPARENT,
-        borderRadius: 10
-    }
-  });
-  
+  container: {
+    flex: 1,
+  },
+  postScreen: {
+    backgroundColor: TRANSPARENT,
+    borderRadius: 20,
+    flex: 1,
+    alignSelf: "center",
+    marginVertical: 30,
+    paddingVertical: 30,
+    width: "85%",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  heading: {
+    fontSize: 20,
+    color: "white",
+    textTransform: "uppercase",
+  },
+  inputsContainer: {
+    justifyContent: "space-around",
+  },
+  input: {
+    padding: 5,
+    marginVertical: 10,
+    minWidth: "70%",
+    backgroundColor: TRANSPARENT,
+    borderRadius: 10,
+  },
+});

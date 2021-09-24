@@ -2,24 +2,33 @@ import React from "react";
 import { View, Text, Image, TextInput, StyleSheet } from "react-native";
 import icon from "../assets/user-circle.png";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import { TRANSPARENT } from "../constants/colors";
+import { PLACEHOLDER, PRIMARY, TRANSPARENT } from "../constants/colors";
 
-export default function CreatePost() {
+export default function CreatePost({ isComment }) {
   return (
-    <View style={styles.createPostContainer}>
+    <View
+      style={
+        isComment
+          ? { ...styles.createPostContainer, ...styles.commentCreator }
+          : { ...styles.createPostContainer }
+      }
+    >
       <Image source={icon} style={{ width: 50, height: 50 }} />
       <TextInput
         placeholder="What's on your mind?"
-        placeholderTextColor="rgba(221, 221, 221, 0.32)"
+        placeholderTextColor={PLACEHOLDER}
         style={{ flex: 1, color: "white", fontSize: 14 }}
       />
+
       <View style={styles.iconsContainer}>
-        <Ionicons
-          style={{ paddingHorizontal: 15 }}
-          name="images"
-          size={20}
-          color="white"
-        />
+        {!isComment && (
+          <Ionicons
+            style={{ paddingRight: 15 }}
+            name="images"
+            size={20}
+            color="white"
+          />
+        )}
         <FontAwesome name="send" size={20} color="white" />
       </View>
     </View>
@@ -42,5 +51,11 @@ const styles = StyleSheet.create({
   },
   iconsContainer: {
     flexDirection: "row",
+    paddingLeft: 15,
+  },
+  commentCreator: {
+    marginBottom: 0,
+    marginTop: 0,
+    backgroundColor: PRIMARY,
   },
 });

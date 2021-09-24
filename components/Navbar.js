@@ -4,12 +4,12 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
   Image,
+  Pressable,
 } from "react-native";
 import { Feather, AntDesign, Entypo } from "@expo/vector-icons";
 import logo from "../assets/favicon.png";
-import { TRANSPARENT } from "../constants/colors";
+import { PLACEHOLDER, TRANSPARENT } from "../constants/colors";
 
 export default function Navbar({ navigation }) {
   return (
@@ -27,7 +27,7 @@ export default function Navbar({ navigation }) {
       <View style={{ ...styles.menuContainer, ...styles.searchBar }}>
         <TextInput
           placeholder="Search..."
-          placeholderTextColor={TRANSPARENT}
+          placeholderTextColor={PLACEHOLDER}
           style={{ flex: 1, color: "white", fontSize: 13 }}
         />
         <Feather
@@ -37,14 +37,15 @@ export default function Navbar({ navigation }) {
           color="white"
         />
       </View>
-      <TouchableOpacity style={styles.menuContainer}>
-        <Entypo
-          name="menu"
-          size={35}
-          color="white"
-          onPress={() => navigation.openDrawer()}
-        />
-      </TouchableOpacity>
+      <Pressable
+        style={({ pressed }) => [
+          { opacity: pressed ? 0.4 : 1 },
+          styles.menuContainer,
+        ]}
+        onPress={() => navigation.openDrawer()}
+      >
+        <Entypo name="menu" size={35} color="white" />
+      </Pressable>
     </View>
   );
 }
