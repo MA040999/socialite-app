@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import PostDetails from "./components/PostDetails";
+import Signup from "./components/Signup";
 
 const HomeStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -48,6 +49,7 @@ export default function App() {
       >
         <Drawer.Screen name="Home" component={HomeStackScreen} />
         <Drawer.Screen name="Login" component={Login} />
+        <Drawer.Screen name="Signup" component={Signup} />
       </Drawer.Navigator>
       <StatusBar style="light" backgroundColor="#211663" />
     </NavigationContainer>

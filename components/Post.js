@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image, Modal } from "react-native";
 import { TRANSPARENT } from "../constants/colors";
 import icon from "../assets/user-circle.png";
 import {
@@ -8,10 +8,14 @@ import {
   AntDesign,
   MaterialIcons,
 } from "@expo/vector-icons";
+import Confirmation from "./Confirmation";
 
 export default function Post({navigation}) {
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
     <View style={styles.postContainer}>
+      <Confirmation isOpen={isOpen} setIsOpen={setIsOpen}/>
       <View style={styles.postHeader}>
         <Image source={icon} style={{ width: 40, height: 40 }} />
         <View style={styles.postHeaderUserName}>
@@ -25,7 +29,7 @@ export default function Post({navigation}) {
             size={20}
             color="white"
           />
-          <Ionicons name="ios-trash" size={20} color="white" />
+          <Ionicons name="ios-trash" size={20} color="white" onPress={()=>setIsOpen(!isOpen)} />
         </View>
       </View>
       <View style={styles.postBody}>
