@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, Pressable } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Navbar from "./Navbar";
@@ -9,8 +9,29 @@ import {
   TRANSPARENT,
 } from "../constants/colors";
 import Button from "./Button";
+import { useDispatch } from "react-redux";
+import { addNotificationMsg } from "../redux/posts/postActions";
+import { validateEmail } from "../common/common";
+import { login } from "../redux/auth/authActions";
 
 export default function Login({ navigation }) {
+  const dispatch = useDispatch();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = () => {
+    if (email === "" || password === "") {
+      dispatch(addNotificationMsg("Please fill both the fields"));
+    } else {
+      if (validateEmail(email)) {
+        dispatch(login({ email, password }, navigation));
+      } else {
+        dispatch(addNotificationMsg("Email address is invalid"));
+      }
+    }
+  };
+
   return (
     <LinearGradient colors={[PRIMARY, SECONDARY]} style={styles.container}>
       <Navbar navigation={navigation} />
@@ -24,6 +45,7 @@ export default function Login({ navigation }) {
             autoCompleteType={"email"}
             keyboardType={"email-address"}
             style={{ color: "white", fontSize: 14, ...styles.input }}
+            onChangeText={setEmail}
           />
           <TextInput
             textContentType="password"
@@ -32,9 +54,10 @@ export default function Login({ navigation }) {
             autoCompleteType={"password"}
             placeholderTextColor={PLACEHOLDER}
             style={{ color: "white", fontSize: 14, ...styles.input }}
+            onChangeText={setPassword}
           />
         </View>
-        <Button title={"Login"} />
+        <Button title={"Login"} handlePress={handleSubmit} />
       </View>
     </LinearGradient>
   );

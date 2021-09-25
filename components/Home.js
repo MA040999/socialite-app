@@ -1,21 +1,22 @@
 import React from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Navbar from "../components/Navbar";
 import CreatePost from "../components/CreatePost";
 import Posts from "../components/Posts";
 import { PRIMARY, SECONDARY } from "../constants/colors";
+import { useSelector } from "react-redux";
 
 export default function Home({ navigation }) {
+  const user = useSelector((state) => state.auth.user);
+
   return (
     <LinearGradient colors={[PRIMARY, SECONDARY]} style={styles.container}>
-      <ScrollView style={{ width: "100%" }}>
-        <Navbar navigation={navigation} />
-        <View style={{ ...styles.container, ...styles.postScreen }}>
-          <CreatePost />
-          <Posts navigation={navigation} />
-        </View>
-      </ScrollView>
+      <Navbar navigation={navigation} />
+      <View style={{ ...styles.container, ...styles.postScreen }}>
+        {user && <CreatePost />}
+        <Posts navigation={navigation} />
+      </View>
     </LinearGradient>
   );
 }
