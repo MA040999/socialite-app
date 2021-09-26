@@ -1,11 +1,26 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { View, Text, Modal, StyleSheet } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { PRIMARY, SECONDARY, TRANSPARENT } from "../constants/colors";
+import { deletePost } from "../redux/posts/postActions";
 import Button from "./Button";
 
-export default function Confirmation({ isOpen, setIsOpen }) {
-  const handleClose = () => {
+export default function Confirmation({ isOpen, setIsOpen, navigation }) {
+  const dispatch = useDispatch();
+  const selectedPost = useSelector((state) => state.posts.selectedPost);
+  const isCommentActive = useSelector((state) => state.posts.isCommentActive);
+
+  const handleNoClick = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleYesClick = () => {
+    if (isCommentActive) {
+      dispatch(deletePost(selectedPost, navigation));
+    } else {
+      dispatch(deletePost(selectedPost));
+    }
     setIsOpen(!isOpen);
   };
   return (
@@ -16,8 +31,8 @@ export default function Confirmation({ isOpen, setIsOpen }) {
             Are you sure you want to delete?
           </Text>
           <View style={styles.buttonContainer}>
-            <Button title={"Yes"} handlePress={handleClose} />
-            <Button title={"No"} handlePress={handleClose} />
+            <Button title={"Yes"} handlePress={handleYesClick} />
+            <Button title={"No"} handlePress={handleNoClick} />
           </View>
         </View>
       </View>

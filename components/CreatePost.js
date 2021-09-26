@@ -9,15 +9,17 @@ import {
   ImageStore,
   Pressable,
 } from "react-native";
-import icon from "../assets/user-circle.png";
+import userCircle from "../assets/user-circle.png";
 import { Ionicons, FontAwesome, Entypo } from "@expo/vector-icons";
 import { PLACEHOLDER, PRIMARY, TRANSPARENT } from "../constants/colors";
 import * as ImagePicker from "expo-image-picker";
+import { useSelector } from "react-redux";
 
 export default function CreatePost({ isComment }) {
   const [image, setImage] = useState([]);
   const [imageBase64, setImageBase64] = useState([]);
   const [postInput, setPostInput] = useState("");
+  const user = useSelector((state) => state.auth.user);
 
   const handleRemoveImage = (index) => {
     setImage((oldImages) => {
@@ -66,7 +68,17 @@ export default function CreatePost({ isComment }) {
       }
     >
       <View style={styles.createPostMain}>
-        <Image source={icon} style={{ width: 50, height: 50 }} />
+        {user?.displayImage ? (
+          <Image
+            source={{ uri: user?.displayImage }}
+            style={{ width: 50, height: 50, borderRadius: 50 }}
+          />
+        ) : (
+          <Image
+            source={userCircle}
+            style={{ width: 50, height: 50, borderRadius: 50 }}
+          />
+        )}
         <TextInput
           placeholder="What's on your mind?"
           placeholderTextColor={PLACEHOLDER}

@@ -11,8 +11,6 @@ export default function Posts({ navigation }) {
 
   useEffect(() => {
     dispatch(getPosts());
-
-    // eslint-disable-next-line
   }, []);
   return (
     <View>
@@ -22,20 +20,20 @@ export default function Posts({ navigation }) {
           ListFooterComponent={<View style={{ marginBottom: 100 }}></View>}
           style={{ width: Dimensions.get("window").width }}
           keyExtractor={(post) => post._id}
-          renderItem={(post) => {
+          renderItem={({ item }) => {
             return (
               <Post
                 navigation={navigation}
-                id={post._id}
+                id={item._id}
                 user={user}
-                creator={post.creator}
-                name={post.name}
-                displayImage={post.displayImage}
-                content={post.content}
-                createdAt={post.createdAt}
-                likeCount={post.likeCount}
-                comments={post.comments}
-                images={post.images}
+                creator={item.creator}
+                name={item.name}
+                displayImage={item.displayImage}
+                content={item.content}
+                createdAt={item.createdAt}
+                likeCount={item.likeCount}
+                comments={item.comments}
+                images={item.images}
               />
             );
           }}

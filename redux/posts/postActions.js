@@ -79,7 +79,7 @@ export const updatePost = (formData, id) => async (dispatch) => {
   }
 };
 
-export const deletePost = (id, history) => async (dispatch) => {
+export const deletePost = (id, navigation) => async (dispatch) => {
   try {
     dispatch(startLoader());
 
@@ -88,8 +88,7 @@ export const deletePost = (id, history) => async (dispatch) => {
     dispatch({ type: DELETE_POST, payload: id });
 
     dispatch({ type: ADD_NOTIFICATION_MSG, payload: data.message });
-
-    history && history.push("/");
+    navigation.goBack();
     dispatch(stopLoader());
   } catch (error) {
     dispatch(stopLoader());

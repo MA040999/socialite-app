@@ -1,29 +1,93 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useEffect } from "react";
+import { StyleSheet, View, FlatList, Dimensions, Text } from "react-native";
 import Post from "./Post";
 import { LinearGradient } from "expo-linear-gradient";
 import Navbar from "./Navbar";
-import { PRIMARY, SECONDARY } from "../constants/colors";
+import { PRIMARY, SECONDARY, TRANSPARENT } from "../constants/colors";
 import Comment from "./Comment";
-import { ScrollView } from "react-native-gesture-handler";
 import CreatePost from "./CreatePost";
+import {
+  changeComment,
+  fetchComments,
+  getPostById,
+  removePost,
+} from "../redux/posts/postActions";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function PostDetails({ navigation }) {
+export default function PostDetails({ route, navigation }) {
+  const dispatch = useDispatch();
+  const post = useSelector((state) => state.posts.post);
+  const user = useSelector((state) => state.auth.user);
+  const commentIds = post?.comments;
+  const postComments = useSelector((state) => state.posts.postComments);
+
+  const { id } = route.params;
+
+  useEffect(() => {
+    dispatch(getPostById(id));
+    dispatch(changeComment());
+
+    return () => {
+      dispatch(removePost());
+      dispatch(changeComment());
+    };
+  }, []);
+
+  useEffect(() => {
+    commentIds && dispatch(fetchComments(commentIds));
+  }, [commentIds]);
+
   return (
     <LinearGradient
       colors={[PRIMARY, SECONDARY]}
       style={styles.postDetailContainer}
     >
-      <ScrollView style={{ width: "100%" }}>
-        <Navbar navigation={navigation} />
-        <Post />
-        <Comment />
-        <Comment />
-        <Comment />
-        <Comment />
-        <Comment />
-        <Comment />
-      </ScrollView>
+      <Navbar navigation={navigation} />
+
+      <FlatList
+        data={postComments}
+        ListHeaderComponent={
+          post && (
+            <Post
+              id={id}
+              navigation={navigation}
+              content={post.content}
+              creator={post.creator}
+              name={post.name}
+              displayImage={post.displayImage}
+              createdAt={post.createdAt}
+              user={user}
+              comments={post.comments}
+              likeCount={post.likeCount}
+              images={post.images}
+            />
+          )
+        }
+        ListEmptyComponent={
+          postComments && (
+            <View
+              style={{
+                alignSelf: "center",
+                justifyContent: "center",
+                borderColor: SECONDARY,
+                borderWidth: 1,
+                borderRadius: 10,
+                padding: 10,
+              }}
+            >
+              <Text style={{ color: "white" }}>Be the first to comment!</Text>
+            </View>
+          )
+        }
+        ListHeaderComponentStyle={{ marginBottom: 20 }}
+        ListFooterComponent={<View style={{ marginBottom: 20 }}></View>}
+        style={{ width: Dimensions.get("window").width }}
+        keyExtractor={(comment) => comment._id}
+        renderItem={({ item }) => {
+          return <Comment key={item._id} comment={item} />;
+        }}
+      />
+
       <View style={{ height: 100, justifyContent: "center" }}>
         <CreatePost isComment={true} />
       </View>

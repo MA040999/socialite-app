@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,9 +12,14 @@ import logo from "../assets/favicon.png";
 import { PLACEHOLDER, TRANSPARENT } from "../constants/colors";
 
 export default function Navbar({ navigation }) {
+  const [canGoBack, setCanGoBack] = useState(navigation.canGoBack());
+
+  useEffect(() => {
+    setCanGoBack(navigation.canGoBack());
+  }, [navigation]);
   return (
     <View style={styles.container}>
-      {navigation.canGoBack() ? (
+      {canGoBack ? (
         <AntDesign
           name="arrowleft"
           size={24}

@@ -85,7 +85,7 @@ export default function AppInner() {
     });
 
     return () => {
-      subscription.remove();
+      subscription?.remove();
     };
   }, []);
 
