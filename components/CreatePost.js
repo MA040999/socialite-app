@@ -13,13 +13,65 @@ import userCircle from "../assets/user-circle.png";
 import { Ionicons, FontAwesome, Entypo } from "@expo/vector-icons";
 import { PLACEHOLDER, PRIMARY, TRANSPARENT } from "../constants/colors";
 import * as ImagePicker from "expo-image-picker";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  changeEditStatus,
+  comment,
+  createPost,
+  updatePost,
+} from "../redux/posts/postActions";
 
 export default function CreatePost({ isComment }) {
+  const dispatch = useDispatch();
+
   const [image, setImage] = useState([]);
   const [imageBase64, setImageBase64] = useState([]);
   const [postInput, setPostInput] = useState("");
+
   const user = useSelector((state) => state.auth.user);
+  const isEdit = useSelector((state) => state.posts.isEditActive);
+  // const isComment = useSelector((state) => state.posts.isCommentActive);
+  const selectedPost = useSelector((state) => state.posts.selectedPost);
+  const postData = useSelector((state) => {
+    if (state.posts.post) {
+      return state.posts.post;
+    } else {
+      return state.posts.posts.find((post) => post._id === selectedPost);
+    }
+  });
+
+  const clearInputs = () => {
+    setPostInput("");
+    setImageBase64([]);
+    setImage([]);
+  };
+
+  const validateData = () => {
+    if (isComment) {
+      if (postInput === "") return false;
+    } else {
+      if (image.length === 0 && postInput === "") return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = () => {
+    if (validateData()) {
+      if (isEdit) {
+        dispatch(
+          updatePost({ content: postInput, file: imageBase64 }, selectedPost)
+        );
+        dispatch(changeEditStatus());
+      } else if (isComment) {
+        dispatch(comment({ content: postInput }, selectedPost));
+        clearInputs();
+      } else {
+        dispatch(createPost({ content: postInput, file: imageBase64 }));
+        clearInputs();
+      }
+    }
+  };
 
   const handleRemoveImage = (index) => {
     setImage((oldImages) => {
@@ -46,7 +98,7 @@ export default function CreatePost({ isComment }) {
           allowsEditing: true,
           quality: 0.6,
           allowsMultipleSelection: true,
-          base64: false,
+          base64: true,
         });
 
         if (!result.cancelled) {
@@ -58,6 +110,14 @@ export default function CreatePost({ isComment }) {
       }
     }
   };
+
+  useEffect(() => {
+    if (isEdit) {
+      setPostInput(postData.content);
+      setImage(postData.images);
+      setImageBase64(postData.images);
+    }
+  }, []);
 
   return (
     <View
@@ -71,7 +131,12 @@ export default function CreatePost({ isComment }) {
         {user?.displayImage ? (
           <Image
             source={{ uri: user?.displayImage }}
-            style={{ width: 50, height: 50, borderRadius: 50 }}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 50,
+              marginHorizontal: 5,
+            }}
           />
         ) : (
           <Image
@@ -95,15 +160,24 @@ export default function CreatePost({ isComment }) {
 
         <View style={styles.iconsContainer}>
           {!isComment && (
-            <Ionicons
-              style={{ paddingRight: 15 }}
-              name="images"
-              size={20}
-              color="white"
+            <Pressable
               onPress={pickImage}
-            />
+              style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+            >
+              <Ionicons
+                style={{ paddingRight: 15 }}
+                name="images"
+                size={20}
+                color="white"
+              />
+            </Pressable>
           )}
-          <FontAwesome name="send" size={20} color="white" />
+          <Pressable
+            onPress={handleSubmit}
+            style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+          >
+            <FontAwesome name="send" size={20} color="white" />
+          </Pressable>
         </View>
       </View>
       {image.length > 0 && (
@@ -133,7 +207,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: TRANSPARENT,
-    paddingVertical: 8,
+    paddingVertical: 12,
     borderRadius: 25,
     marginHorizontal: 8,
     marginBottom: 40,
@@ -172,7 +246,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: -7,
     zIndex: 1,
-    backgroundColor: TRANSPARENT,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
     borderRadius: 50,
   },
 });

@@ -11,7 +11,13 @@ import {
 import Confirmation from "./Confirmation";
 import EditPost from "./EditPost";
 import moment from "moment";
-import { changeSelectedPost, likePost } from "../redux/posts/postActions";
+import {
+  changeComment,
+  changeConfirmationStatus,
+  changeEditStatus,
+  changeSelectedPost,
+  likePost,
+} from "../redux/posts/postActions";
 import { useDispatch } from "react-redux";
 
 export default function Post(props) {
@@ -32,8 +38,6 @@ export default function Post(props) {
     user,
   } = props;
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [isEditOpen, setIsEditOpen] = useState(false);
   const [like, setLike] = useState(likeCount?.includes(user?.id));
   const [likeLength, setLikeLength] = useState(likeCount?.length);
 
@@ -49,21 +53,16 @@ export default function Post(props) {
 
   return (
     <View style={styles.postContainer}>
-      {!isComment && (
-        <Confirmation
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          navigation={navigation}
-        />
-      )}
-      {!isComment && (
-        <EditPost isEditOpen={isEditOpen} setIsEditOpen={setIsEditOpen} />
-      )}
       <View style={styles.postHeader}>
         {displayImage ? (
           <Image
             source={{ uri: displayImage }}
-            style={{ width: 40, height: 40, borderRadius: 50 }}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 50,
+              marginHorizontal: 5,
+            }}
           />
         ) : (
           <Image
@@ -77,12 +76,12 @@ export default function Post(props) {
             {moment(createdAt).fromNow()}
           </Text>
         </View>
-        {(!isComment || user?.id === creator) && (
+        {!isComment && user?.id === creator && (
           <View style={styles.iconsContainer}>
             <Pressable
               onPress={() => {
                 dispatch(changeSelectedPost(id));
-                setIsEditOpen(!isEditOpen);
+                dispatch(changeEditStatus());
               }}
               style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
             >
@@ -96,7 +95,7 @@ export default function Post(props) {
             <Pressable
               onPress={() => {
                 dispatch(changeSelectedPost(id));
-                setIsOpen(!isOpen);
+                dispatch(changeConfirmationStatus());
               }}
               style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
             >
@@ -138,9 +137,10 @@ export default function Post(props) {
           )}
           <Text style={{ color: "white", marginLeft: 5 }}>{likeLength}</Text>
           <Pressable
-            onPress={() =>
-              navigation && navigation.navigate("PostDetails", { id })
-            }
+            onPress={() => {
+              dispatch(changeSelectedPost(id));
+              navigation && navigation.navigate("PostDetails", { id });
+            }}
             style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
           >
             <MaterialIcons
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   },
   postBody: {
     marginVertical: 20,
-    paddingLeft: 45,
+    paddingLeft: 55,
   },
   iconsContainer: {
     flexDirection: "row",
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   likeCommentContainer: {
-    paddingLeft: 45,
+    paddingLeft: 55,
     marginVertical: 10,
   },
   image: {

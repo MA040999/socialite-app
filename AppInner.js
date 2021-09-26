@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { verifyRefreshToken } from "./redux/auth/authActions";
 import * as SecureStore from "expo-secure-store";
 import { AppState, View } from "react-native";
+import EditProfile from "./components/EditProfile";
 
 const HomeStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -39,6 +40,9 @@ export default function AppInner() {
     let token = await SecureStore.getItemAsync("__refresh__token");
     if (token) {
       dispatch(verifyRefreshToken(token));
+      setTimeout(() => {
+        getNewToken();
+      }, 600000 - 1000); //10 minutes - 1 second
     }
   };
 
@@ -81,7 +85,6 @@ export default function AppInner() {
 
       appState.current = nextAppState;
       setAppStateVisible(appState.current);
-      console.log("AppState", appState.current);
     });
 
     return () => {
@@ -121,6 +124,7 @@ export default function AppInner() {
           <Drawer.Screen name="Home" component={HomeStackScreen} />
           {!user && <Drawer.Screen name="Login" component={Login} />}
           {!user && <Drawer.Screen name="Signup" component={Signup} />}
+          {user && <Drawer.Screen name="Profile" component={EditProfile} />}
         </Drawer.Navigator>
         <StatusBar style="light" backgroundColor={PRIMARY} />
       </NavigationContainer>

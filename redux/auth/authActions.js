@@ -56,7 +56,7 @@ export const login = ({ email, password }, navigation) => {
   };
 };
 
-export const updateProfile = (formData, history) => {
+export const updateProfile = (formData, navigation) => {
   return async (dispatch) => {
     try {
       dispatch(startLoader());
@@ -64,7 +64,7 @@ export const updateProfile = (formData, history) => {
       const { data } = await app.put("/auth/update-profile/", formData);
       dispatch({ type: UPDATE_PROFILE, payload: data });
 
-      history.push("/");
+      navigation.navigate("HomeScreen");
       dispatch(stopLoader());
     } catch (error) {
       dispatch(stopLoader());

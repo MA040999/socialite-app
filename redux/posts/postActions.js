@@ -88,7 +88,7 @@ export const deletePost = (id, navigation) => async (dispatch) => {
     dispatch({ type: DELETE_POST, payload: id });
 
     dispatch({ type: ADD_NOTIFICATION_MSG, payload: data.message });
-    navigation.goBack();
+    navigation && navigation.goBack();
     dispatch(stopLoader());
   } catch (error) {
     dispatch(stopLoader());
@@ -209,9 +209,10 @@ export const changeConfirmationStatus = () => {
   };
 };
 
-export const changeComment = () => {
+export const changeComment = (status) => {
   return {
     type: IS_COMMENT_ACTIVE,
+    payload: status,
   };
 };
 export const startLoader = () => {

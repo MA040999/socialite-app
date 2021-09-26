@@ -3,16 +3,23 @@ import React from "react";
 import { View, Text, Modal, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { PRIMARY, SECONDARY, TRANSPARENT } from "../constants/colors";
-import { deletePost } from "../redux/posts/postActions";
+import {
+  changeConfirmationStatus,
+  deletePost,
+} from "../redux/posts/postActions";
 import Button from "./Button";
 
-export default function Confirmation({ isOpen, setIsOpen, navigation }) {
+export default function Confirmation({ navigation }) {
   const dispatch = useDispatch();
+
   const selectedPost = useSelector((state) => state.posts.selectedPost);
   const isCommentActive = useSelector((state) => state.posts.isCommentActive);
+  const confirmationStatus = useSelector(
+    (state) => state.posts.isConfirmationActive
+  );
 
   const handleNoClick = () => {
-    setIsOpen(!isOpen);
+    dispatch(changeConfirmationStatus());
   };
 
   const handleYesClick = () => {
@@ -21,10 +28,14 @@ export default function Confirmation({ isOpen, setIsOpen, navigation }) {
     } else {
       dispatch(deletePost(selectedPost));
     }
-    setIsOpen(!isOpen);
+    dispatch(changeConfirmationStatus());
   };
   return (
-    <Modal animationType="slide" transparent={true} visible={isOpen}>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={confirmationStatus}
+    >
       <View style={styles.modalContainer}>
         <View style={styles.modal}>
           <Text style={{ color: "white" }}>

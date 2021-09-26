@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View, FlatList, Dimensions, Text } from "react-native";
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  Dimensions,
+  Text,
+  RefreshControl,
+} from "react-native";
 import Post from "./Post";
 import { LinearGradient } from "expo-linear-gradient";
 import Navbar from "./Navbar";
@@ -16,20 +23,32 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function PostDetails({ route, navigation }) {
   const dispatch = useDispatch();
-  const post = useSelector((state) => state.posts.post);
+  const { id } = route.params;
+
+  // const post = useSelector((state) =>
+  //   state.posts.posts.find((post) => post._id === id)
+  // );
+  const post = useSelector((state) =>
+    state.posts.post
+      ? state.posts.post
+      : state.posts.posts.find((post) => post._id === id)
+  );
   const user = useSelector((state) => state.auth.user);
   const commentIds = post?.comments;
   const postComments = useSelector((state) => state.posts.postComments);
+  const isLoading = useSelector((state) => state.posts.isLoading);
 
-  const { id } = route.params;
+  const fetchPost = () => {
+    dispatch(getPostById(id));
+  };
 
   useEffect(() => {
-    dispatch(getPostById(id));
-    dispatch(changeComment());
+    fetchPost();
+    dispatch(changeComment(true));
 
     return () => {
       dispatch(removePost());
-      dispatch(changeComment());
+      dispatch(changeComment(false));
     };
   }, []);
 
@@ -46,6 +65,15 @@ export default function PostDetails({ route, navigation }) {
 
       <FlatList
         data={postComments}
+        refreshing={isLoading}
+        refreshControl={
+          <RefreshControl
+            progressBackgroundColor={PRIMARY}
+            colors={[SECONDARY]}
+            onRefresh={fetchPost}
+            refreshing={isLoading}
+          />
+        }
         ListHeaderComponent={
           post && (
             <Post
@@ -89,7 +117,7 @@ export default function PostDetails({ route, navigation }) {
       />
 
       <View style={{ height: 100, justifyContent: "center" }}>
-        <CreatePost isComment={true} />
+        {user && <CreatePost isComment={true} />}
       </View>
     </LinearGradient>
   );

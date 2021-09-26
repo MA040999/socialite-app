@@ -58,7 +58,7 @@ const postReducer = (state = initialState, action) => {
     case GET_POSTS:
       return {
         ...state,
-        posts: [...state.posts, ...action.payload.posts],
+        posts: [...action.payload.posts],
       };
     case DELETE_POST:
       return {
@@ -122,7 +122,7 @@ const postReducer = (state = initialState, action) => {
     case IS_COMMENT_ACTIVE:
       return {
         ...state,
-        isCommentActive: !state.isCommentActive,
+        isCommentActive: action.payload,
       };
     case IS_SEARCH_ACTIVE:
       return {
