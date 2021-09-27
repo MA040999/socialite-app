@@ -145,7 +145,7 @@ export default function CreatePost({ isComment }) {
           />
         )}
         <TextInput
-          placeholder="What's on your mind?"
+          placeholder={isComment ? "Leave a comment..." : "What's on your mind?"}
           placeholderTextColor={PLACEHOLDER}
           style={{
             flex: 1,

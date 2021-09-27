@@ -15,6 +15,8 @@ import { verifyRefreshToken } from "./redux/auth/authActions";
 import * as SecureStore from "expo-secure-store";
 import { AppState, View } from "react-native";
 import EditProfile from "./components/EditProfile";
+import DrawerContent from "./components/DrawerContent";
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 
 const HomeStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -53,7 +55,6 @@ export default function AppInner() {
       } catch (e) {
         console.warn(e);
       } finally {
-        // Tell the application to render
         setAppIsReady(true);
       }
     }
@@ -63,11 +64,6 @@ export default function AppInner() {
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
-      // This tells the splash screen to hide immediately! If we call this after
-      // `setAppIsReady`, then we may see a blank screen while the app is
-      // loading its initial state and rendering its first pixels. So instead,
-      // we hide the splash screen once we know the root view has already
-      // performed layout.
       await SplashScreen.hideAsync();
     }
   }, [appIsReady]);
@@ -109,22 +105,25 @@ export default function AppInner() {
             drawerInactiveTintColor: "white",
             drawerStyle: {
               marginTop: 24,
-              paddingTop: 20,
+              // paddingTop: 20,
               backgroundColor: PRIMARY,
               borderTopRightRadius: 50,
               borderBottomRightRadius: 50,
+        overflow:'hidden',
+
               elevation: 10,
             },
             drawerItemStyle: {
               borderRadius: 15,
-              padding: 5,
             },
+            
           }}
+          drawerContent={(props)=><DrawerContent {...props}/>}
         >
-          <Drawer.Screen name="Home" component={HomeStackScreen} />
+          <Drawer.Screen name="Home" component={HomeStackScreen} options={{drawerIcon: ({focused, color, size})=><AntDesign name="home" size={size} color={color} />}} />
           {!user && <Drawer.Screen name="Login" component={Login} />}
           {!user && <Drawer.Screen name="Signup" component={Signup} />}
-          {user && <Drawer.Screen name="Profile" component={EditProfile} />}
+          {user && <Drawer.Screen name="Profile" component={EditProfile} options={{drawerIcon: ({focused, color, size})=><FontAwesome5 name="user-edit" size={size} color={color} />}}/>}
         </Drawer.Navigator>
         <StatusBar style="light" backgroundColor={PRIMARY} />
       </NavigationContainer>

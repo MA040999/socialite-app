@@ -13,6 +13,7 @@ import {
 } from "../posts/postActions";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
+import { API_BASE_URL } from "../../common/common";
 
 export const authError = (error) => {
   return {
@@ -90,7 +91,7 @@ export const verifyRefreshToken = (token) => {
   return async (dispatch) => {
     try {
       const user = await axios.get(
-        "http://192.168.100.59:4000/auth/refresh-token",
+        `${API_BASE_URL}auth/refresh-token`,
         {
           headers: { "X-Access-Token": token },
         }

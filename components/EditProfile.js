@@ -124,7 +124,6 @@ export default function EditProfile({ navigation }) {
   return (
     <LinearGradient colors={[PRIMARY, SECONDARY]} style={styles.container}>
       <Navbar navigation={navigation} />
-      {console.log(`imageDimension`, imageDimension)}
       <Animated.View style={styles.postScreen}>
         <Text style={styles.heading}>Profile</Text>
         <View
