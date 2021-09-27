@@ -13,6 +13,9 @@ import { useDispatch } from "react-redux";
 import { addNotificationMsg } from "../redux/posts/postActions";
 import { validateEmail } from "../common/common";
 import { login } from "../redux/auth/authActions";
+import MyAppText from "./MyAppText";
+import { globalStyles } from "../styles/globalStyles";
+import { NUNITO_LIGHT, NUNITO_REGULAR } from "../constants/fonts";
 
 export default function Login({ navigation }) {
   const dispatch = useDispatch();
@@ -36,7 +39,7 @@ export default function Login({ navigation }) {
     <LinearGradient colors={[PRIMARY, SECONDARY]} style={styles.container}>
       <Navbar navigation={navigation} />
       <View style={{ ...styles.postScreen }}>
-        <Text style={styles.heading}>Login</Text>
+        <MyAppText style={globalStyles.heading}>Login</MyAppText>
         <View style={styles.inputsContainer}>
           <TextInput
             textContentType="emailAddress"
@@ -53,7 +56,11 @@ export default function Login({ navigation }) {
             secureTextEntry={true}
             autoCompleteType={"password"}
             placeholderTextColor={PLACEHOLDER}
-            style={{ color: "white", fontSize: 14, ...styles.input }}
+            style={{
+              color: "white",
+              fontSize: 14,
+              ...styles.input,
+            }}
             onChangeText={setPassword}
           />
         </View>
@@ -78,11 +85,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  heading: {
-    fontSize: 20,
-    color: "white",
-    textTransform: "uppercase",
-  },
   inputsContainer: {
     justifyContent: "space-around",
   },
@@ -92,5 +94,6 @@ const styles = StyleSheet.create({
     minWidth: "70%",
     backgroundColor: TRANSPARENT,
     borderRadius: 10,
+    fontFamily: NUNITO_REGULAR,
   },
 });

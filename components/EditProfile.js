@@ -24,6 +24,9 @@ import userCircle from "../assets/user-circle.png";
 import Button from "./Button";
 import * as ImagePicker from "expo-image-picker";
 import { Feather } from "@expo/vector-icons";
+import MyAppText from "./MyAppText";
+import { NUNITO_BOLD, NUNITO_LIGHT, NUNITO_REGULAR } from "../constants/fonts";
+import { globalStyles } from "../styles/globalStyles";
 
 export default function EditProfile({ navigation }) {
   const dispatch = useDispatch();
@@ -125,7 +128,7 @@ export default function EditProfile({ navigation }) {
     <LinearGradient colors={[PRIMARY, SECONDARY]} style={styles.container}>
       <Navbar navigation={navigation} />
       <Animated.View style={styles.postScreen}>
-        <Text style={styles.heading}>Profile</Text>
+        <MyAppText style={globalStyles.heading}>Profile</MyAppText>
         <View
           style={{ alignItems: "center", justifyContent: "center", flex: 2 }}
         >
@@ -165,7 +168,11 @@ export default function EditProfile({ navigation }) {
             placeholderTextColor={PLACEHOLDER}
             autoCompleteType={"name"}
             keyboardType={"default"}
-            style={{ color: "white", fontSize: 16, ...styles.input }}
+            style={{
+              color: "white",
+              fontSize: 16,
+              ...styles.input,
+            }}
             value={fullName}
             onChangeText={setFullName}
           />
@@ -197,11 +204,7 @@ const styles = StyleSheet.create({
     minWidth: "70%",
     backgroundColor: TRANSPARENT,
     borderRadius: 10,
-  },
-  heading: {
-    fontSize: 20,
-    color: "white",
-    textTransform: "uppercase",
+    fontFamily: NUNITO_REGULAR,
   },
   upload: {
     position: "absolute",

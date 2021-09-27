@@ -8,6 +8,7 @@ import {
   deletePost,
 } from "../redux/posts/postActions";
 import Button from "./Button";
+import MyAppText from "./MyAppText";
 
 export default function Confirmation({ navigation }) {
   const dispatch = useDispatch();
@@ -38,9 +39,9 @@ export default function Confirmation({ navigation }) {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modal}>
-          <Text style={{ color: "white" }}>
+          <MyAppText style={{ color: "white" }}>
             Are you sure you want to delete?
-          </Text>
+          </MyAppText>
           <View style={styles.buttonContainer}>
             <Button title={"Yes"} handlePress={handleYesClick} />
             <Button title={"No"} handlePress={handleNoClick} />

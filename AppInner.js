@@ -16,7 +16,9 @@ import * as SecureStore from "expo-secure-store";
 import { AppState, View } from "react-native";
 import EditProfile from "./components/EditProfile";
 import DrawerContent from "./components/DrawerContent";
-import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
+import { AntDesign, FontAwesome5, Ionicons, Feather } from "@expo/vector-icons";
+import * as Font from "expo-font";
+import { NUNITO_BOLD } from "./constants/fonts";
 
 const HomeStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -37,6 +39,17 @@ export default function AppInner() {
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
   const [appIsReady, setAppIsReady] = useState(false);
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  const loadFonts = async () => {
+    await Font.loadAsync({
+      "Nunito-Bold": require("./assets/fonts/Nunito-Bold.ttf"),
+      "Nunito-Light": require("./assets/fonts/Nunito-Light.ttf"),
+      "Nunito-SemiBold": require("./assets/fonts/Nunito-SemiBold.ttf"),
+      "Nunito-Regular": require("./assets/fonts/Nunito-Regular.ttf"),
+    });
+    setFontLoaded(true);
+  };
 
   const getNewToken = async () => {
     let token = await SecureStore.getItemAsync("__refresh__token");
@@ -51,6 +64,7 @@ export default function AppInner() {
   useEffect(() => {
     async function prepare() {
       try {
+        loadFonts();
         await SplashScreen.preventAutoHideAsync();
       } catch (e) {
         console.warn(e);
@@ -88,7 +102,7 @@ export default function AppInner() {
     };
   }, []);
 
-  if (!appIsReady) {
+  if (!appIsReady || !fontLoaded) {
     return null;
   }
 
@@ -109,21 +123,62 @@ export default function AppInner() {
               backgroundColor: PRIMARY,
               borderTopRightRadius: 50,
               borderBottomRightRadius: 50,
-        overflow:'hidden',
+              overflow: "hidden",
 
               elevation: 10,
             },
             drawerItemStyle: {
               borderRadius: 15,
             },
-            
+            drawerLabelStyle: {
+              fontFamily: NUNITO_BOLD,
+              fontSize: 16,
+            },
           }}
-          drawerContent={(props)=><DrawerContent {...props}/>}
+          drawerContent={(props) => <DrawerContent {...props} />}
         >
-          <Drawer.Screen name="Home" component={HomeStackScreen} options={{drawerIcon: ({focused, color, size})=><AntDesign name="home" size={size} color={color} />}} />
-          {!user && <Drawer.Screen name="Login" component={Login} />}
-          {!user && <Drawer.Screen name="Signup" component={Signup} />}
-          {user && <Drawer.Screen name="Profile" component={EditProfile} options={{drawerIcon: ({focused, color, size})=><FontAwesome5 name="user-edit" size={size} color={color} />}}/>}
+          <Drawer.Screen
+            name="Home"
+            component={HomeStackScreen}
+            options={{
+              drawerIcon: ({ focused, color, size }) => (
+                <AntDesign name="home" size={size} color={color} />
+              ),
+            }}
+          />
+          {!user && (
+            <Drawer.Screen
+              name="Login"
+              component={Login}
+              options={{
+                drawerIcon: ({ focused, color, size }) => (
+                  <Ionicons name="log-in-outline" size={size} color={color} />
+                ),
+              }}
+            />
+          )}
+          {!user && (
+            <Drawer.Screen
+              name="Signup"
+              component={Signup}
+              options={{
+                drawerIcon: ({ focused, color, size }) => (
+                  <Feather name="user-plus" size={size} color={color} />
+                ),
+              }}
+            />
+          )}
+          {user && (
+            <Drawer.Screen
+              name="Profile"
+              component={EditProfile}
+              options={{
+                drawerIcon: ({ focused, color, size }) => (
+                  <FontAwesome5 name="user-edit" size={size} color={color} />
+                ),
+              }}
+            />
+          )}
         </Drawer.Navigator>
         <StatusBar style="light" backgroundColor={PRIMARY} />
       </NavigationContainer>

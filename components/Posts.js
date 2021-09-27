@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, FlatList, Dimensions, RefreshControl } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { PRIMARY, SECONDARY } from "../constants/colors";
-import { getPosts } from "../redux/posts/postActions";
+import { getPosts, removePosts } from "../redux/posts/postActions";
 import Post from "./Post";
 
 export default function Posts({ navigation }) {
@@ -13,6 +13,7 @@ export default function Posts({ navigation }) {
   const isLoading = useSelector((state) => state.posts.isLoading);
 
   const fetchPosts = () => {
+    dispatch(removePosts());
     dispatch(getPosts());
   };
 
@@ -34,7 +35,9 @@ export default function Posts({ navigation }) {
               refreshing={isLoading}
             />
           }
-          ListFooterComponent={<View style={{ marginBottom: 100 }}></View>}
+          ListFooterComponent={
+            <View style={{ marginBottom: user ? 100 : 50 }}></View>
+          }
           style={{ width: Dimensions.get("window").width }}
           keyExtractor={(post) => post._id}
           renderItem={({ item }) => {

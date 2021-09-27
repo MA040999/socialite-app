@@ -19,6 +19,8 @@ import {
   likePost,
 } from "../redux/posts/postActions";
 import { useDispatch } from "react-redux";
+import MyAppText from "./MyAppText";
+import { NUNITO_BOLD, NUNITO_SEMIBOLD } from "../constants/fonts";
 
 export default function Post(props) {
   const dispatch = useDispatch();
@@ -71,10 +73,18 @@ export default function Post(props) {
           />
         )}
         <View style={styles.postHeaderUserName}>
-          <Text style={{ color: "white" }}>{name}</Text>
-          <Text style={{ fontSize: 10, color: "white" }}>
+          <MyAppText
+            style={{
+              color: "white",
+              fontFamily: NUNITO_SEMIBOLD,
+              fontSize: 15,
+            }}
+          >
+            {name}
+          </MyAppText>
+          <MyAppText style={{ fontSize: 10, color: "white" }}>
             {moment(createdAt).fromNow()}
-          </Text>
+          </MyAppText>
         </View>
         {!isComment && user?.id === creator && (
           <View style={styles.iconsContainer}>
@@ -83,6 +93,7 @@ export default function Post(props) {
                 dispatch(changeSelectedPost(id));
                 dispatch(changeEditStatus());
               }}
+              hitSlop={8}
               style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
             >
               <Feather
@@ -97,6 +108,7 @@ export default function Post(props) {
                 dispatch(changeSelectedPost(id));
                 dispatch(changeConfirmationStatus());
               }}
+              hitSlop={8}
               style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
             >
               <Ionicons name="ios-trash" size={20} color="white" />
@@ -105,7 +117,11 @@ export default function Post(props) {
         )}
       </View>
       <View style={styles.postBody}>
-        <Text style={{ color: "white" }}>{content}</Text>
+        <MyAppText
+          style={{ color: "white", fontFamily: NUNITO_SEMIBOLD, fontSize: 14 }}
+        >
+          {content}
+        </MyAppText>
       </View>
       {!isComment && images?.length > 0 && (
         <View style={styles.postImagesContainer}>
@@ -124,6 +140,7 @@ export default function Post(props) {
             <Pressable
               onPress={handleLikeClick}
               style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+              hitSlop={8}
             >
               <AntDesign name="heart" size={20} color="white" />
             </Pressable>
@@ -131,16 +148,22 @@ export default function Post(props) {
             <Pressable
               onPress={handleLikeClick}
               style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+              hitSlop={8}
             >
               <AntDesign name="hearto" size={20} color="white" />
             </Pressable>
           )}
-          <Text style={{ color: "white", marginLeft: 5 }}>{likeLength}</Text>
+          <MyAppText
+            style={{ color: "white", marginLeft: 5, fontFamily: NUNITO_BOLD }}
+          >
+            {likeLength}
+          </MyAppText>
           <Pressable
             onPress={() => {
               dispatch(changeSelectedPost(id));
               navigation && navigation.navigate("PostDetails", { id });
             }}
+            hitSlop={8}
             style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
           >
             <MaterialIcons
@@ -151,9 +174,11 @@ export default function Post(props) {
             />
           </Pressable>
 
-          <Text style={{ color: "white", marginLeft: 5 }}>
+          <MyAppText
+            style={{ color: "white", marginLeft: 5, fontFamily: NUNITO_BOLD }}
+          >
             {comments.length}
-          </Text>
+          </MyAppText>
         </View>
       )}
     </View>

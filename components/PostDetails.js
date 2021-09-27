@@ -20,6 +20,7 @@ import {
   removePost,
 } from "../redux/posts/postActions";
 import { useDispatch, useSelector } from "react-redux";
+import MyAppText from "./MyAppText";
 
 export default function PostDetails({ route, navigation }) {
   const dispatch = useDispatch();
@@ -103,7 +104,9 @@ export default function PostDetails({ route, navigation }) {
                 padding: 10,
               }}
             >
-              <Text style={{ color: "white" }}>Be the first to comment!</Text>
+              <MyAppText style={{ color: "white" }}>
+                Be the first to comment!
+              </MyAppText>
             </View>
           )
         }
@@ -116,9 +119,11 @@ export default function PostDetails({ route, navigation }) {
         }}
       />
 
-      <View style={{ height: 100, justifyContent: "center" }}>
-        {user && <CreatePost isComment={true} />}
-      </View>
+      {user && (
+        <View style={{ height: 100, justifyContent: "center" }}>
+          <CreatePost isComment={true} />
+        </View>
+      )}
     </LinearGradient>
   );
 }

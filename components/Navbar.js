@@ -10,6 +10,7 @@ import {
 import { Feather, AntDesign, Entypo } from "@expo/vector-icons";
 import logo from "../assets/favicon.png";
 import { PLACEHOLDER, TRANSPARENT } from "../constants/colors";
+import { NUNITO_REGULAR } from "../constants/fonts";
 
 export default function Navbar({ navigation }) {
   const [canGoBack, setCanGoBack] = useState(navigation.canGoBack());
@@ -20,12 +21,13 @@ export default function Navbar({ navigation }) {
   return (
     <View style={styles.container}>
       {canGoBack ? (
-        <AntDesign
-          name="arrowleft"
-          size={24}
-          color="white"
+        <Pressable
+          style={({ pressed }) => [{ opacity: pressed ? 0.4 : 1 }]}
+          hitSlop={15}
           onPress={() => navigation.goBack()}
-        />
+        >
+          <AntDesign name="arrowleft" size={24} color="white" />
+        </Pressable>
       ) : (
         <Image source={logo} style={{ width: 50, height: 50 }} />
       )}
@@ -33,7 +35,12 @@ export default function Navbar({ navigation }) {
         <TextInput
           placeholder="Search..."
           placeholderTextColor={PLACEHOLDER}
-          style={{ flex: 1, color: "white", fontSize: 13 }}
+          style={{
+            flex: 1,
+            color: "white",
+            fontSize: 13,
+            fontFamily: NUNITO_REGULAR,
+          }}
         />
         <Feather
           style={{ paddingLeft: 5 }}
@@ -47,6 +54,7 @@ export default function Navbar({ navigation }) {
           { opacity: pressed ? 0.4 : 1 },
           styles.menuContainer,
         ]}
+        hitSlop={10}
         onPress={() => navigation.openDrawer()}
       >
         <Entypo name="menu" size={35} color="white" />

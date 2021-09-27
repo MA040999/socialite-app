@@ -20,6 +20,7 @@ import {
   createPost,
   updatePost,
 } from "../redux/posts/postActions";
+import { NUNITO_REGULAR } from "../constants/fonts";
 
 export default function CreatePost({ isComment }) {
   const dispatch = useDispatch();
@@ -145,13 +146,16 @@ export default function CreatePost({ isComment }) {
           />
         )}
         <TextInput
-          placeholder={isComment ? "Leave a comment..." : "What's on your mind?"}
+          placeholder={
+            isComment ? "Leave a comment..." : "What's on your mind?"
+          }
           placeholderTextColor={PLACEHOLDER}
           style={{
             flex: 1,
             color: "white",
             fontSize: 14,
             textAlignVertical: "center",
+            fontFamily: NUNITO_REGULAR,
           }}
           multiline={true}
           value={postInput}
@@ -163,6 +167,7 @@ export default function CreatePost({ isComment }) {
             <Pressable
               onPress={pickImage}
               style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+              hitSlop={10}
             >
               <Ionicons
                 style={{ paddingRight: 15 }}
@@ -175,6 +180,7 @@ export default function CreatePost({ isComment }) {
           <Pressable
             onPress={handleSubmit}
             style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+            hitSlop={10}
           >
             <FontAwesome name="send" size={20} color="white" />
           </Pressable>

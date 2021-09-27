@@ -2,6 +2,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { PRIMARY, SECONDARY } from "../constants/colors";
+import MyAppText from "./MyAppText";
 
 export default function Button({ title, handlePress }) {
   return (
@@ -14,7 +15,7 @@ export default function Button({ title, handlePress }) {
         colors={[PRIMARY, SECONDARY]}
         style={styles.button}
       >
-        <Text style={styles.buttonText}>{title}</Text>
+        <MyAppText style={styles.buttonText}>{title}</MyAppText>
       </LinearGradient>
     </Pressable>
   );

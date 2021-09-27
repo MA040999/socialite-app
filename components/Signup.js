@@ -9,13 +9,16 @@ import {
   TRANSPARENT,
 } from "../constants/colors";
 import Button from "./Button";
+import { globalStyles } from "../styles/globalStyles";
+import MyAppText from "./MyAppText";
+import { NUNITO_REGULAR } from "../constants/fonts";
 
 export default function Signup({ navigation }) {
   return (
     <LinearGradient colors={[PRIMARY, SECONDARY]} style={styles.container}>
       <Navbar navigation={navigation} />
       <View style={{ ...styles.postScreen }}>
-        <Text style={styles.heading}>Signup</Text>
+        <MyAppText style={globalStyles.heading}>Signup</MyAppText>
         <View style={styles.inputsContainer}>
           <TextInput
             textContentType="name"
@@ -71,11 +74,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  heading: {
-    fontSize: 20,
-    color: "white",
-    textTransform: "uppercase",
-  },
   button: {
     borderRadius: 15,
     padding: 10,
@@ -94,5 +92,6 @@ const styles = StyleSheet.create({
     minWidth: "70%",
     backgroundColor: TRANSPARENT,
     borderRadius: 10,
+    fontFamily: NUNITO_REGULAR,
   },
 });
