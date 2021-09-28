@@ -27,14 +27,16 @@ import { Feather } from "@expo/vector-icons";
 import MyAppText from "./MyAppText";
 import { NUNITO_BOLD, NUNITO_LIGHT, NUNITO_REGULAR } from "../constants/fonts";
 import { globalStyles } from "../styles/globalStyles";
+import Loader from "./Loader";
 
 export default function EditProfile({ navigation }) {
   const dispatch = useDispatch();
-  
+
   const keyboardHeight = useRef(new Animated.Value(0)).current;
   const imageDimension = useRef(new Animated.Value(120)).current;
 
   const user = useSelector((state) => state.auth.user);
+  const isLoading = useSelector((state) => state.posts.isLoading);
 
   const [fullName, setFullName] = useState(user?.fullname);
   const [imageFileData, setImageFileData] = useState(null);
@@ -126,7 +128,8 @@ export default function EditProfile({ navigation }) {
   return (
     <LinearGradient colors={[PRIMARY, SECONDARY]} style={styles.container}>
       <Navbar navigation={navigation} />
-      <Animated.View style={styles.postScreen}>
+      {isLoading && <Loader />}
+      <Animated.View style={globalStyles.loginContainer}>
         <MyAppText style={globalStyles.heading}>Profile</MyAppText>
         <View
           style={{ alignItems: "center", justifyContent: "center", flex: 2 }}
@@ -148,7 +151,11 @@ export default function EditProfile({ navigation }) {
             ) : (
               <Animated.Image
                 source={imageFileData ? { uri: imageFileData } : userCircle}
-                style={{ height: imageDimension, width: imageDimension, borderRadius: 100 }}
+                style={{
+                  height: imageDimension,
+                  width: imageDimension,
+                  borderRadius: 100,
+                }}
               />
             )}
             <Pressable
@@ -186,21 +193,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  postScreen: {
-    backgroundColor: TRANSPARENT,
-    borderRadius: 20,
-    flex: 1,
-    alignSelf: "center",
-    marginVertical: 30,
-    paddingVertical: 10,
-    width: "90%",
-    alignItems: "center",
-    justifyContent: "flex-start",
-  },
   input: {
     padding: 5,
     marginVertical: 30,
     minWidth: "70%",
+    maxWidth: "70%",
     backgroundColor: TRANSPARENT,
     borderRadius: 10,
     fontFamily: NUNITO_REGULAR,

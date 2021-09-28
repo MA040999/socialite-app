@@ -1,5 +1,12 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Pressable, ActivityIndicator } from "react-native";
+import React, { useRef, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Pressable,
+  ActivityIndicator,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Navbar from "./Navbar";
 import {
@@ -17,13 +24,20 @@ import MyAppText from "./MyAppText";
 import { globalStyles } from "../styles/globalStyles";
 import { NUNITO_LIGHT, NUNITO_REGULAR } from "../constants/fonts";
 import Loader from "./Loader";
+import {
+  SimpleLineIcons,
+  FontAwesome,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 
 export default function Login({ navigation }) {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.posts.isLoading);
+  const passwordRef = useRef();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordDisplay, setPasswordDisplay] = useState(true);
 
   const handleSubmit = () => {
     if (email === "" || password === "") {
@@ -40,33 +54,56 @@ export default function Login({ navigation }) {
   return (
     <LinearGradient colors={[PRIMARY, SECONDARY]} style={styles.container}>
       <Navbar navigation={navigation} />
-      {isLoading && <Loader/>
-      }
-      <View style={{ ...styles.postScreen }}>
+      {isLoading && <Loader />}
+      <View style={{ ...globalStyles.loginContainer }}>
         <MyAppText style={globalStyles.heading}>Login</MyAppText>
         <View style={styles.inputsContainer}>
-          <TextInput
-            textContentType="emailAddress"
-            placeholder="Email Address"
-            placeholderTextColor={PLACEHOLDER}
-            autoCompleteType={"email"}
-            keyboardType={"email-address"}
-            style={{ color: "white", fontSize: 14, ...styles.input }}
-            onChangeText={setEmail}
-          />
-          <TextInput
-            textContentType="password"
-            placeholder="Password"
-            secureTextEntry={true}
-            autoCompleteType={"password"}
-            placeholderTextColor={PLACEHOLDER}
-            style={{
-              color: "white",
-              fontSize: 14,
-              ...styles.input,
-            }}
-            onChangeText={setPassword}
-          />
+          <View style={styles.input}>
+            <MaterialCommunityIcons
+              name="email-outline"
+              size={20}
+              color="white"
+            />
+            <TextInput
+              textContentType="emailAddress"
+              placeholder="Email Address"
+              placeholderTextColor={PLACEHOLDER}
+              autoCompleteType={"email"}
+              autoCapitalize="none"
+              keyboardType={"email-address"}
+              style={globalStyles.inputField}
+              onChangeText={setEmail}
+              returnKeyType="next"
+              onSubmitEditing={() => passwordRef.current.focus()}
+              blurOnSubmit={false}
+            />
+          </View>
+          <View style={styles.input}>
+            <SimpleLineIcons name="lock" size={20} color="white" />
+            <TextInput
+              textContentType="password"
+              placeholder="Password"
+              secureTextEntry={passwordDisplay}
+              autoCompleteType={"password"}
+              placeholderTextColor={PLACEHOLDER}
+              style={globalStyles.inputField}
+              onChangeText={setPassword}
+              returnKeyType="done"
+              ref={passwordRef}
+              onSubmitEditing={handleSubmit}
+            />
+            <Pressable
+              onPress={() => setPasswordDisplay(!passwordDisplay)}
+              style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+              hitSlop={8}
+            >
+              {!passwordDisplay ? (
+                <FontAwesome name="eye-slash" size={22} color="white" />
+              ) : (
+                <FontAwesome name="eye" size={22} color="white" />
+              )}
+            </Pressable>
+          </View>
         </View>
         <Button title={"Login"} handlePress={handleSubmit} />
       </View>
@@ -78,26 +115,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  postScreen: {
-    backgroundColor: TRANSPARENT,
-    borderRadius: 20,
-    flex: 1,
-    alignSelf: "center",
-    marginVertical: 30,
-    paddingVertical: 30,
-    width: "85%",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
   inputsContainer: {
     justifyContent: "space-around",
   },
   input: {
     padding: 5,
     marginVertical: 10,
-    minWidth: "70%",
+    minWidth: "80%",
+    maxWidth: "80%",
     backgroundColor: TRANSPARENT,
     borderRadius: 10,
     fontFamily: NUNITO_REGULAR,
+    color: "white",
+    fontSize: 14,
+    flexDirection: "row",
+    paddingHorizontal: 10,
+    alignItems: "center",
   },
 });

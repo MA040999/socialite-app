@@ -89,12 +89,9 @@ export const verifyAuth = () => {
 export const verifyRefreshToken = (token) => {
   return async (dispatch) => {
     try {
-      const user = await axios.get(
-        `${API_BASE_URL}auth/refresh-token`,
-        {
-          headers: { "X-Access-Token": token },
-        }
-      );
+      const user = await axios.get(`${API_BASE_URL}auth/refresh-token`, {
+        headers: { "X-Access-Token": token },
+      });
       dispatch({ type: AUTH, payload: user?.data });
     } catch {
       dispatch(stopLoader());
@@ -139,9 +136,9 @@ export const logout = (navigation) => {
 
       await app.get("/auth/logout/");
       dispatch({ type: LOGOUT });
-      await SecureStore.deleteItemAsync( "__refresh__token")
-      
-      navigation.navigate('Home')
+      await SecureStore.deleteItemAsync("__refresh__token");
+
+      navigation.navigate("Home");
       dispatch(stopLoader());
     } catch (error) {
       dispatch(stopLoader());

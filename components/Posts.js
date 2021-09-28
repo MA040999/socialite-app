@@ -38,7 +38,10 @@ export default function Posts({ navigation }) {
           ListFooterComponent={
             <View style={{ marginBottom: user ? 100 : 50 }}></View>
           }
-          style={{ width: Dimensions.get("window").width }}
+          style={{
+            width: Dimensions.get("window").width,
+            marginTop: user ? 0 : -30,
+          }}
           keyExtractor={(post) => post._id}
           renderItem={({ item }) => {
             return (

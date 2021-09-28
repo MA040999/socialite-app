@@ -14,15 +14,13 @@ import { NUNITO_BOLD } from "../constants/fonts";
 import { logout } from "../redux/auth/authActions";
 
 export default function DrawerContent(props) {
+  const user = useSelector((state) => state.auth.user);
+  const isLoading = useSelector((state) => state.posts.isLoading);
 
-    const user = useSelector((state) => state.auth.user);
-    const isLoading = useSelector((state) => state.posts.isLoading);
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   return (
     <View style={{ flex: 1, paddingBottom: 10, paddingTop: user ? 0 : 30 }}>
-        
       {user && (
         <View style={styles.drawerHeader}>
           {user?.displayImage ? (
@@ -48,11 +46,17 @@ export default function DrawerContent(props) {
       </DrawerContentScrollView>
       {user && (
         <DrawerItem
-          icon={({ focused, color, size }) => (
-            isLoading ? <ActivityIndicator size="small" color={PRIMARY} /> : <Ionicons name="exit-outline" size={size} color={color} />
-          )}
+          icon={({ focused, color, size }) =>
+            isLoading ? (
+              <ActivityIndicator size="small" color={PRIMARY} />
+            ) : (
+              <Ionicons name="exit-outline" size={size} color={color} />
+            )
+          }
           label="Signout"
-          onPress={() => {dispatch(logout(props.navigation))}}
+          onPress={() => {
+            dispatch(logout(props.navigation));
+          }}
           pressColor={TRANSPARENT}
           style={{
             borderBottomRightRadius: 40,
@@ -62,7 +66,7 @@ export default function DrawerContent(props) {
           labelStyle={{ fontFamily: NUNITO_BOLD, fontSize: 16 }}
           inactiveBackgroundColor={SECONDARY}
           inactiveTintColor={PRIMARY}
-          {...props}
+          // {...props}
         />
       )}
     </View>
