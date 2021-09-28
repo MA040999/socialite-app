@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet, Text, View, TextInput, Pressable } from "react-native";
+import React, { useRef, useState } from "react";
+import { StyleSheet, Text, View, TextInput, Pressable, Animated } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Navbar from "./Navbar";
 import {
@@ -12,11 +12,49 @@ import Button from "./Button";
 import { globalStyles } from "../styles/globalStyles";
 import MyAppText from "./MyAppText";
 import { NUNITO_REGULAR } from "../constants/fonts";
+import { useDispatch, useSelector } from "react-redux";
+import { addNotificationMsg } from "../redux/posts/postActions";
+import { validateEmail } from "../common/common";
+import { signup } from "../redux/auth/authActions";
+import Loader from "./Loader";
 
 export default function Signup({ navigation }) {
+
+  const imageDimension = useRef(new Animated.Value(120)).current;
+
+    const dispatch = useDispatch()
+    const isLoading = useSelector((state) => state.posts.isLoading);
+
+  const [email, setEmail] = useState("");
+  const [fullname, setFullname] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  
+    const validateData = (email, fullname, password) => {
+        if (email === "" || fullname === "" || password === "") {
+          dispatch(addNotificationMsg("Please fill all the fields"));
+        } else {
+          if (validateEmail(email)) {
+            if (password === confirmPassword) {
+              dispatch(signup({ fullname, email, password }, navigation));
+            } else {
+              dispatch(addNotificationMsg("Passwords are not matching"));
+            }
+          } else {
+            dispatch(addNotificationMsg("Email address is invalid"));
+          }
+        }
+      };
+
+    let handleSubmit = () => {
+        validateData(email, fullname, password);
+      };
+
   return (
     <LinearGradient colors={[PRIMARY, SECONDARY]} style={styles.container}>
       <Navbar navigation={navigation} />
+      {isLoading && <Loader/>
+      }
       <View style={{ ...styles.postScreen }}>
         <MyAppText style={globalStyles.heading}>Signup</MyAppText>
         <View style={styles.inputsContainer}>
@@ -27,6 +65,8 @@ export default function Signup({ navigation }) {
             autoCompleteType={"name"}
             keyboardType={"default"}
             style={{ color: "white", fontSize: 14, ...styles.input }}
+            onChangeText={setFullname}
+
           />
           <TextInput
             textContentType="emailAddress"
@@ -35,6 +75,8 @@ export default function Signup({ navigation }) {
             autoCompleteType={"email"}
             keyboardType={"email-address"}
             style={{ color: "white", fontSize: 14, ...styles.input }}
+            onChangeText={setEmail}
+
           />
           <TextInput
             textContentType="password"
@@ -43,6 +85,8 @@ export default function Signup({ navigation }) {
             autoCompleteType={"password"}
             placeholderTextColor={PLACEHOLDER}
             style={{ color: "white", fontSize: 14, ...styles.input }}
+            onChangeText={setPassword}
+
           />
           <TextInput
             textContentType="password"
@@ -51,9 +95,11 @@ export default function Signup({ navigation }) {
             autoCompleteType={"password"}
             placeholderTextColor={PLACEHOLDER}
             style={{ color: "white", fontSize: 14, ...styles.input }}
+            onChangeText={setConfirmPassword}
+
           />
         </View>
-        <Button title={"Signup"} />
+        <Button title={"Signup"} handlePress={handleSubmit} />
       </View>
     </LinearGradient>
   );

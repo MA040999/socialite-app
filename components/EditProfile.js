@@ -30,11 +30,10 @@ import { globalStyles } from "../styles/globalStyles";
 
 export default function EditProfile({ navigation }) {
   const dispatch = useDispatch();
+  
   const keyboardHeight = useRef(new Animated.Value(0)).current;
-  //   const [keyboardHeight, setKeyboardHeight] = useState(new Animated.Value(0));
   const imageDimension = useRef(new Animated.Value(120)).current;
 
-  // const [imageDimension, setImageDimension] = useState(new Animated.Value(90));
   const user = useSelector((state) => state.auth.user);
 
   const [fullName, setFullName] = useState(user?.fullname);
@@ -149,7 +148,7 @@ export default function EditProfile({ navigation }) {
             ) : (
               <Animated.Image
                 source={imageFileData ? { uri: imageFileData } : userCircle}
-                style={{ height: imageDimension, width: imageDimension }}
+                style={{ height: imageDimension, width: imageDimension, borderRadius: 100 }}
               />
             )}
             <Pressable

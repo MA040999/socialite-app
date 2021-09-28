@@ -42,7 +42,6 @@ export const login = ({ email, password }, navigation) => {
       if (error.response) {
         // There is an error response from the server
         // You can anticipate error.response.data here
-        const error = err.response.data;
         dispatch(addNotificationMsg(error.response.data.message));
       } else if (error.request) {
         // The request was made but no response was received
@@ -104,7 +103,7 @@ export const verifyRefreshToken = (token) => {
   };
 };
 
-export const signup = ({ fullname, email, password }, history) => {
+export const signup = ({ fullname, email, password }, navigation) => {
   return async (dispatch) => {
     try {
       dispatch(startLoader());
@@ -114,9 +113,16 @@ export const signup = ({ fullname, email, password }, history) => {
         email,
         password,
       });
+
+      await SecureStore.setItemAsync(
+        "__refresh__token",
+        String(user?.data.refreshToken)
+      );
+      delete user?.data.refreshToken;
+
       dispatch({ type: AUTH, payload: user?.data });
 
-      history.push("/");
+      navigation.navigate("HomeScreen");
       dispatch(stopLoader());
     } catch (error) {
       dispatch(stopLoader());
@@ -126,14 +132,16 @@ export const signup = ({ fullname, email, password }, history) => {
   };
 };
 
-export const logout = (history) => {
+export const logout = (navigation) => {
   return async (dispatch) => {
     try {
       dispatch(startLoader());
 
       await app.get("/auth/logout/");
       dispatch({ type: LOGOUT });
-      history.push("/");
+      await SecureStore.deleteItemAsync( "__refresh__token")
+      
+      navigation.navigate('Home')
       dispatch(stopLoader());
     } catch (error) {
       dispatch(stopLoader());

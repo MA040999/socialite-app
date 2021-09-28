@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Pressable } from "react-native";
+import { StyleSheet, Text, View, TextInput, Pressable, ActivityIndicator } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Navbar from "./Navbar";
 import {
@@ -9,16 +9,18 @@ import {
   TRANSPARENT,
 } from "../constants/colors";
 import Button from "./Button";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addNotificationMsg } from "../redux/posts/postActions";
 import { validateEmail } from "../common/common";
 import { login } from "../redux/auth/authActions";
 import MyAppText from "./MyAppText";
 import { globalStyles } from "../styles/globalStyles";
 import { NUNITO_LIGHT, NUNITO_REGULAR } from "../constants/fonts";
+import Loader from "./Loader";
 
 export default function Login({ navigation }) {
   const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.posts.isLoading);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,6 +40,8 @@ export default function Login({ navigation }) {
   return (
     <LinearGradient colors={[PRIMARY, SECONDARY]} style={styles.container}>
       <Navbar navigation={navigation} />
+      {isLoading && <Loader/>
+      }
       <View style={{ ...styles.postScreen }}>
         <MyAppText style={globalStyles.heading}>Login</MyAppText>
         <View style={styles.inputsContainer}>

@@ -69,7 +69,12 @@ export default function Post(props) {
         ) : (
           <Image
             source={userCircle}
-            style={{ width: 40, height: 40, borderRadius: 50 }}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 50,
+              marginHorizontal: 5,
+            }}
           />
         )}
         <View style={styles.postHeaderUserName}>

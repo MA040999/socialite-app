@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, ActivityIndicator } from "react-native";
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -7,16 +7,22 @@ import {
 } from "@react-navigation/drawer";
 import { PRIMARY, SECONDARY, TRANSPARENT } from "../constants/colors";
 import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import userCircle from "../assets/user-circle.png";
 import MyAppText from "./MyAppText";
 import { NUNITO_BOLD } from "../constants/fonts";
+import { logout } from "../redux/auth/authActions";
 
 export default function DrawerContent(props) {
-  const user = useSelector((state) => state.auth.user);
+
+    const user = useSelector((state) => state.auth.user);
+    const isLoading = useSelector((state) => state.posts.isLoading);
+
+  const dispatch = useDispatch()
 
   return (
     <View style={{ flex: 1, paddingBottom: 10, paddingTop: user ? 0 : 30 }}>
+        
       {user && (
         <View style={styles.drawerHeader}>
           {user?.displayImage ? (
@@ -43,10 +49,10 @@ export default function DrawerContent(props) {
       {user && (
         <DrawerItem
           icon={({ focused, color, size }) => (
-            <Ionicons name="exit-outline" size={size} color={color} />
+            isLoading ? <ActivityIndicator size="small" color={PRIMARY} /> : <Ionicons name="exit-outline" size={size} color={color} />
           )}
           label="Signout"
-          onPress={() => {}}
+          onPress={() => {dispatch(logout(props.navigation))}}
           pressColor={TRANSPARENT}
           style={{
             borderBottomRightRadius: 40,
