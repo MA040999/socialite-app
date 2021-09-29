@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import EditPost from "./EditPost";
 import Confirmation from "./Confirmation";
 import { changeComment, getPosts } from "../redux/posts/postActions";
+import Notification from "./Notification";
 
 export default function Home({ navigation }) {
   const dispatch = useDispatch();

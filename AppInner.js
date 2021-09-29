@@ -19,6 +19,7 @@ import DrawerContent from "./components/DrawerContent";
 import { AntDesign, FontAwesome5, Ionicons, Feather } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { NUNITO_BOLD } from "./constants/fonts";
+import Notification from "./components/Notification";
 
 const HomeStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -108,6 +109,7 @@ export default function AppInner() {
 
   return (
     <>
+
       <NavigationContainer>
         <Drawer.Navigator
           initialRouteName="Home"
@@ -180,6 +182,8 @@ export default function AppInner() {
             />
           )}
         </Drawer.Navigator>
+        <Notification/>
+
         <StatusBar style="light" backgroundColor={PRIMARY} />
       </NavigationContainer>
       <View onLayout={onLayoutRootView}></View>

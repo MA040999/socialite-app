@@ -11,6 +11,7 @@ import { Feather, AntDesign, Entypo } from "@expo/vector-icons";
 import logo from "../assets/favicon.png";
 import { PLACEHOLDER, TRANSPARENT } from "../constants/colors";
 import { NUNITO_REGULAR } from "../constants/fonts";
+import SearchBar from "./SearchBar";
 
 export default function Navbar({ navigation }) {
   const [canGoBack, setCanGoBack] = useState(navigation.canGoBack());
@@ -31,24 +32,7 @@ export default function Navbar({ navigation }) {
       ) : (
         <Image source={logo} style={{ width: 50, height: 50 }} />
       )}
-      <View style={{ ...styles.menuContainer, ...styles.searchBar }}>
-        <TextInput
-          placeholder="Search..."
-          placeholderTextColor={PLACEHOLDER}
-          style={{
-            flex: 1,
-            color: "white",
-            fontSize: 13,
-            fontFamily: NUNITO_REGULAR,
-          }}
-        />
-        <Feather
-          style={{ paddingLeft: 5 }}
-          name="search"
-          size={15}
-          color="white"
-        />
-      </View>
+      <SearchBar navigation={navigation}/>
       <Pressable
         style={({ pressed }) => [
           { opacity: pressed ? 0.4 : 1 },

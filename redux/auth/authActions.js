@@ -39,18 +39,8 @@ export const login = ({ email, password }, navigation) => {
       navigation.navigate("HomeScreen");
       dispatch(stopLoader());
     } catch (error) {
-      if (error.response) {
-        // There is an error response from the server
-        // You can anticipate error.response.data here
-        dispatch(addNotificationMsg(error.response.data.message));
-      } else if (error.request) {
-        // The request was made but no response was received
-        // Error details are stored in error.reqeust
-        console.log(error.request);
-      } else {
-        // Some other errors
-        console.log("Error", error.message);
-      }
+      dispatch(addNotificationMsg(error.response.data.message));
+      
       dispatch(stopLoader());
     }
   };
