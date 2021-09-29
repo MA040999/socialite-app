@@ -13,13 +13,15 @@ import { PRIMARY, SECONDARY } from "./constants/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyRefreshToken } from "./redux/auth/authActions";
 import * as SecureStore from "expo-secure-store";
-import { AppState, View } from "react-native";
+import { AppState, Modal, View } from "react-native";
 import EditProfile from "./components/EditProfile";
 import DrawerContent from "./components/DrawerContent";
 import { AntDesign, FontAwesome5, Ionicons, Feather } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { NUNITO_BOLD } from "./constants/fonts";
 import Notification from "./components/Notification";
+import LottieView from 'lottie-react-native';
+import { LinearGradient } from "expo-linear-gradient";
 
 const HomeStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -41,6 +43,8 @@ export default function AppInner() {
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
   const [appIsReady, setAppIsReady] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [hasAnimationPlayedOnce, setHasAnimationPlayedOnce] = useState(false)
+  const [isModalVisible, setIsModalVisible] = useState(false)
 
   const loadFonts = async () => {
     await Font.loadAsync({
@@ -80,6 +84,7 @@ export default function AppInner() {
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
       await SplashScreen.hideAsync();
+      setIsModalVisible(true)
     }
   }, [appIsReady]);
 
@@ -107,9 +112,24 @@ export default function AppInner() {
     return null;
   }
 
+  const handleAnimationFinish = () => {
+    setHasAnimationPlayedOnce(true)
+    setIsModalVisible(false)
+  }
+
   return (
     <>
+      <Modal visible={isModalVisible} animationType="fade">
+    <LinearGradient colors={[PRIMARY, SECONDARY]} style={{flex: 1, width: '100%', height: "100%"}}>
+      <LottieView
+        source={require('./assets/animation.json')}
+        loop={false}
+        autoPlay
+        onAnimationFinish={handleAnimationFinish}
+       />
+    </LinearGradient>
 
+    </Modal>
       <NavigationContainer>
         <Drawer.Navigator
           initialRouteName="Home"
