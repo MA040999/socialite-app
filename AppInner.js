@@ -1,6 +1,5 @@
 import "react-native-gesture-handler";
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
@@ -13,15 +12,14 @@ import { PRIMARY, SECONDARY } from "./constants/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyRefreshToken } from "./redux/auth/authActions";
 import * as SecureStore from "expo-secure-store";
-import { AppState, Modal, View } from "react-native";
+import { AppState, View } from "react-native";
 import EditProfile from "./components/EditProfile";
 import DrawerContent from "./components/DrawerContent";
 import { AntDesign, FontAwesome5, Ionicons, Feather } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { NUNITO_BOLD } from "./constants/fonts";
 import Notification from "./components/Notification";
-import LottieView from 'lottie-react-native';
-import { LinearGradient } from "expo-linear-gradient";
+import Splash from "./components/Splash";
 
 const HomeStack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -29,6 +27,7 @@ const Drawer = createDrawerNavigator();
 function HomeStackScreen() {
   return (
     <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+      <HomeStack.Screen name="Splash" component={Splash}/>
       <HomeStack.Screen name="HomeScreen" component={Home} />
       <HomeStack.Screen name="PostDetails" component={PostDetails} />
     </HomeStack.Navigator>
@@ -112,24 +111,10 @@ export default function AppInner() {
     return null;
   }
 
-  const handleAnimationFinish = () => {
-    setHasAnimationPlayedOnce(true)
-    setIsModalVisible(false)
-  }
+  
 
   return (
     <>
-      <Modal visible={isModalVisible} animationType="fade">
-    <LinearGradient colors={[PRIMARY, SECONDARY]} style={{flex: 1, width: '100%', height: "100%"}}>
-      <LottieView
-        source={require('./assets/animation.json')}
-        loop={false}
-        autoPlay
-        onAnimationFinish={handleAnimationFinish}
-       />
-    </LinearGradient>
-
-    </Modal>
       <NavigationContainer>
         <Drawer.Navigator
           initialRouteName="Home"
@@ -140,8 +125,7 @@ export default function AppInner() {
             drawerActiveTintColor: PRIMARY,
             drawerInactiveTintColor: "white",
             drawerStyle: {
-              marginTop: 24,
-              // paddingTop: 20,
+              marginTop: 26,
               backgroundColor: PRIMARY,
               borderTopRightRadius: 50,
               borderBottomRightRadius: 50,
@@ -168,6 +152,7 @@ export default function AppInner() {
               ),
             }}
           />
+          
           {!user && (
             <Drawer.Screen
               name="Login"
@@ -203,8 +188,6 @@ export default function AppInner() {
           )}
         </Drawer.Navigator>
         <Notification/>
-
-        <StatusBar style="light" backgroundColor={PRIMARY} />
       </NavigationContainer>
       <View onLayout={onLayoutRootView}></View>
     </>

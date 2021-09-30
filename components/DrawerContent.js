@@ -66,9 +66,12 @@ export default function DrawerContent(props) {
           labelStyle={{ fontFamily: NUNITO_BOLD, fontSize: 16 }}
           inactiveBackgroundColor={SECONDARY}
           inactiveTintColor={PRIMARY}
+
           // {...props}
         />
+        
       )}
+      
     </View>
   );
 }
