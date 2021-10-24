@@ -21,8 +21,13 @@ import {
 import { useDispatch } from "react-redux";
 import MyAppText from "./MyAppText";
 import { NUNITO_BOLD, NUNITO_SEMIBOLD } from "../constants/fonts";
+import ImageModal from "./ImageModal";
 
 export default function Post(props) {
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imageIndex, setImageIndex] = useState(0);
+  const [selectedImageArray, setSelectedImageArray] = useState(null);
   const dispatch = useDispatch();
 
   const {
@@ -54,139 +59,164 @@ export default function Post(props) {
   };
 
   return (
-    <View style={styles.postContainer}>
-      <View style={styles.postHeader}>
-        {displayImage ? (
-          <Image
-            source={{ uri: displayImage }}
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 50,
-              marginHorizontal: 5,
-            }}
-          />
-        ) : (
-          <Image
-            source={userCircle}
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 50,
-              marginHorizontal: 5,
-            }}
-          />
-        )}
-        <View style={styles.postHeaderUserName}>
+    <>
+      <ImageModal
+        selectedImage={selectedImage}
+        selectedImageArray={selectedImageArray}
+        isModalActive={isModalActive}
+        setIsModalActive={setIsModalActive}
+        imageIndex={imageIndex}
+      />
+      <View style={styles.postContainer}>
+        <View style={styles.postHeader}>
+          {displayImage ? (
+            <Image
+              source={{ uri: displayImage }}
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 50,
+                marginHorizontal: 5,
+              }}
+            />
+          ) : (
+            <Image
+              source={userCircle}
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 50,
+                marginHorizontal: 5,
+              }}
+            />
+          )}
+          <View style={styles.postHeaderUserName}>
+            <MyAppText
+              style={{
+                color: "white",
+                fontFamily: NUNITO_SEMIBOLD,
+                fontSize: 15,
+              }}
+            >
+              {name}
+            </MyAppText>
+            <MyAppText style={{ fontSize: 10, color: "white" }}>
+              {moment(createdAt).fromNow()}
+            </MyAppText>
+          </View>
+          {!isComment && user?.id === creator && (
+            <View style={styles.iconsContainer}>
+              <Pressable
+                onPress={() => {
+                  dispatch(changeSelectedPost(id));
+                  dispatch(changeEditStatus());
+                }}
+                hitSlop={8}
+                style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+              >
+                <Feather
+                  style={{ paddingHorizontal: 15 }}
+                  name="edit"
+                  size={20}
+                  color="white"
+                />
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  dispatch(changeSelectedPost(id));
+                  dispatch(changeConfirmationStatus());
+                }}
+                hitSlop={8}
+                style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+              >
+                <Ionicons name="ios-trash" size={20} color="white" />
+              </Pressable>
+            </View>
+          )}
+        </View>
+        <View style={styles.postBody}>
           <MyAppText
             style={{
               color: "white",
               fontFamily: NUNITO_SEMIBOLD,
-              fontSize: 15,
+              fontSize: 14,
             }}
           >
-            {name}
-          </MyAppText>
-          <MyAppText style={{ fontSize: 10, color: "white" }}>
-            {moment(createdAt).fromNow()}
+            {content}
           </MyAppText>
         </View>
-        {!isComment && user?.id === creator && (
-          <View style={styles.iconsContainer}>
+        {!isComment && images?.length > 0 && (
+          <View style={styles.postImagesContainer}>
+            {images.map((image, index) => {
+              return (
+                <Pressable
+                  key={index}
+                  onPress={() => {
+                    setSelectedImage(image);
+                    setImageIndex(index);
+                    setSelectedImageArray(images);
+                    setIsModalActive(true);
+                  }}
+                  hitSlop={8}
+                  style={({ pressed }) => [{ opacity: pressed ? 0.8 : 1 }]}
+                >
+                  <Image source={{ uri: image }} style={styles.image} />
+                </Pressable>
+              );
+            })}
+          </View>
+        )}
+        {!isComment && (
+          <View
+            style={{ ...styles.iconsContainer, ...styles.likeCommentContainer }}
+          >
+            {like ? (
+              <Pressable
+                onPress={handleLikeClick}
+                style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+                hitSlop={8}
+              >
+                <AntDesign name="heart" size={20} color="white" />
+              </Pressable>
+            ) : (
+              <Pressable
+                onPress={handleLikeClick}
+                style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+                hitSlop={8}
+              >
+                <AntDesign name="hearto" size={20} color="white" />
+              </Pressable>
+            )}
+            <MyAppText
+              style={{ color: "white", marginLeft: 5, fontFamily: NUNITO_BOLD }}
+            >
+              {likeLength}
+            </MyAppText>
             <Pressable
               onPress={() => {
                 dispatch(changeSelectedPost(id));
-                dispatch(changeEditStatus());
+                navigation && navigation.navigate("PostDetails", { id });
               }}
               hitSlop={8}
               style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
             >
-              <Feather
-                style={{ paddingHorizontal: 15 }}
-                name="edit"
+              <MaterialIcons
+                style={{ paddingLeft: 15 }}
+                name="comment"
                 size={20}
                 color="white"
               />
             </Pressable>
-            <Pressable
-              onPress={() => {
-                dispatch(changeSelectedPost(id));
-                dispatch(changeConfirmationStatus());
-              }}
-              hitSlop={8}
-              style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+
+            <MyAppText
+              style={{ color: "white", marginLeft: 5, fontFamily: NUNITO_BOLD }}
             >
-              <Ionicons name="ios-trash" size={20} color="white" />
-            </Pressable>
+              {comments.length}
+            </MyAppText>
           </View>
         )}
       </View>
-      <View style={styles.postBody}>
-        <MyAppText
-          style={{ color: "white", fontFamily: NUNITO_SEMIBOLD, fontSize: 14 }}
-        >
-          {content}
-        </MyAppText>
-      </View>
-      {!isComment && images?.length > 0 && (
-        <View style={styles.postImagesContainer}>
-          {images.map((image, index) => {
-            return (
-              <Image key={index} source={{ uri: image }} style={styles.image} />
-            );
-          })}
-        </View>
-      )}
-      {!isComment && (
-        <View
-          style={{ ...styles.iconsContainer, ...styles.likeCommentContainer }}
-        >
-          {like ? (
-            <Pressable
-              onPress={handleLikeClick}
-              style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
-              hitSlop={8}
-            >
-              <AntDesign name="heart" size={20} color="white" />
-            </Pressable>
-          ) : (
-            <Pressable
-              onPress={handleLikeClick}
-              style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
-              hitSlop={8}
-            >
-              <AntDesign name="hearto" size={20} color="white" />
-            </Pressable>
-          )}
-          <MyAppText
-            style={{ color: "white", marginLeft: 5, fontFamily: NUNITO_BOLD }}
-          >
-            {likeLength}
-          </MyAppText>
-          <Pressable
-            onPress={() => {
-              dispatch(changeSelectedPost(id));
-              navigation && navigation.navigate("PostDetails", { id });
-            }}
-            hitSlop={8}
-            style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
-          >
-            <MaterialIcons
-              style={{ paddingLeft: 15 }}
-              name="comment"
-              size={20}
-              color="white"
-            />
-          </Pressable>
-
-          <MyAppText
-            style={{ color: "white", marginLeft: 5, fontFamily: NUNITO_BOLD }}
-          >
-            {comments.length}
-          </MyAppText>
-        </View>
-      )}
-    </View>
+    </>
   );
 }
 

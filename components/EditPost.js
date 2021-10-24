@@ -1,8 +1,7 @@
-import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { View, Text, Modal, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { PRIMARY, SECONDARY, TRANSPARENT } from "../constants/colors";
+import { TRANSPARENT } from "../constants/colors";
 import { changeEditStatus } from "../redux/posts/postActions";
 import Button from "./Button";
 import CreatePost from "./CreatePost";

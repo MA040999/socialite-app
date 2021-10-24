@@ -185,11 +185,10 @@ export const resetPage = () => {
 
 export const addNotificationMsg = (msg) => async (dispatch) => {
   dispatch({ type: ADD_NOTIFICATION_MSG, payload: msg });
-  
+
   // setTimeout(()=>{
   //   dispatch(removeNotificationMsg())
   // }, 3000)
-
 };
 
 export const removeNotificationMsg = () => {
